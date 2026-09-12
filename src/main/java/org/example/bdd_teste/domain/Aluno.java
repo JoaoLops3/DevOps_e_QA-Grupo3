@@ -25,6 +25,11 @@ public class Aluno {
         return tipoAssinatura;
     }
 
+    /** Stub para o RED compilar; ainda não concede moedas (GREEN virá depois). */
+    public int getMoedas() {
+        return 0;
+    }
+
     public List<CursoConcluido> getCursosConcluidos() {
         return Collections.unmodifiableList(cursosConcluidos);
     }
