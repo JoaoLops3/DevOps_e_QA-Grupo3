@@ -22,6 +22,14 @@ Educação Continuada Gamificada (case passado em aula).
 | _(nome)_ | Promover para Premium + 3 moedas ao atingir 12 (RED comentado) |
 | _(nome)_ | Não contabilizar curso com média &lt; 7,0 (RED comentado) |
 
+## Evidência — User Stories e BDD
+
+Print da planilha/documento com as **User Stories** e os **BDDs** do grupo.
+
+Arquivo: `docs/evidencias/us-bdd/USER STORIES_BDD.png`
+
+![User Stories e BDD](docs/evidencias/us-bdd/USER%20STORIES_BDD.png)
+
 ## Estrutura do projeto (alinhada ao enunciado)
 
 ```
@@ -39,6 +47,7 @@ src/test/java/org/example/bdd_teste/
     └── CalculadoraProgressoTest.java
 
 docs/evidencias/
+├── us-bdd/                           # print User Stories + BDD
 ├── red/                              # prints testes falhando
 ├── green/                            # prints passando + JaCoCo
 └── blue/                             # 100% cobertura, sem amarelo/vermelho
@@ -63,12 +72,14 @@ docker/                               # Dockerfile + compose + Postgres (próxim
 - Swagger / OpenAPI (próximo)
 - Vue.js frontend (próximo)
 
+
+
 ## Checklist da entrega
 
 - [x] Pacote `domain` + classes de domínio
 - [x] Pacote `domaintest` + `CalculadoraProgressoTest`
 - [x] BLUE do 1º critério (progresso 3/9) — RED dos demais comentado no teste
-- [ ] Evidências RED / GREEN / BLUE em `docs/evidencias/`
+- [x] Evidências RED / GREEN / BLUE em `docs/evidencias/`
 - [ ] Camadas Service, Repository, Entity, DTO, Controller
 - [ ] Endpoint + Swagger
 - [ ] Frontend Vue.js
