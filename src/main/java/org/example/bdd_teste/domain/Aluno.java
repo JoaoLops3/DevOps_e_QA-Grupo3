@@ -1,9 +1,13 @@
-package org.example.bdd_teste;
+package org.example.bdd_teste.domain;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Agregado do aluno: assinatura atual e histórico de cursos concluídos.
+ * Lista encapsulada (imutável para fora) para o progresso não ser adulterado por fora.
+ */
 public class Aluno {
 
     private final TipoAssinatura tipoAssinatura;

@@ -12,7 +12,7 @@
     <artifactId>BDD_TESTE</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>BDD_TESTE</name>
-    <description>BDD_TESTE</description>
+    <description>Educação Continuada Gamificada — TDD/ATDD História 3QA (progresso assinatura básica)</description>
     <url/>
     <licenses>
         <license/>
@@ -39,6 +39,20 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webmvc</artifactId>
+        </dependency>
+
+        <!-- H2: banco em memória (dev/test) — evidência do enunciado -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- PostgreSQL: banco da entrega com Docker/pgAdmin -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
         </dependency>
 
         <dependency>

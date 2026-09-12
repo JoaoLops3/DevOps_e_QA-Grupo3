@@ -9,5 +9,4 @@ public class BddTesteApplication {
     public static void main(String[] args) {
         SpringApplication.run(BddTesteApplication.class, args);
     }
-
 }

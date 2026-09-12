@@ -1,4 +1,4 @@
-package org.example.bdd_teste;
+package org.example.bdd_teste.domain;
 
 public enum TipoAssinatura {
     BASICA,
