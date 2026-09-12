@@ -6,21 +6,21 @@ Spring Boot + TDD/ATDD (Red → Green → Blue) da US de progresso da assinatura
 
 Educação Continuada Gamificada (case passado em aula).
 
-## User Story (escolhida)
+## User Story escolhida pelo grupo
 
 | Campo | Conteúdo |
 |--------|----------|
-| Código | 3QA |
-| Integrante que redigiu | _(preencher nome)_ |
+| Código | **3QA** |
+| Integrante que redigiu | Miguel Muran |
 | US | COMO usuário da assinatura básica, QUERO visualizar quantos cursos já concluí e quantos faltam para os 12 necessários, PARA ter clareza sobre minha evolução e o que falta para virar Premium |
 
 ## BDD por integrante
 
 | Integrante | Cenário BDD |
 |------------|-------------|
-| _(nome)_ | Exibir concluídos e faltantes para os 12 (BLUE atual) |
-| _(nome)_ | Promover para Premium + 3 moedas ao atingir 12 (RED comentado) |
-| _(nome)_ | Não contabilizar curso com média &lt; 7,0 (RED comentado) |
+| João Gabriel | Exibir concluídos e faltantes para os 12 (BLUE — implementado e ativo) |
+| Hector | Promover para Premium + 3 moedas ao atingir 12 (RED — pronto, comentado no teste) |
+| Miguel Muran | Não contabilizar curso com média &lt; 7,0 (RED — pronto, comentado no teste) |
 
 ## Evidência — User Stories e BDD
 
@@ -72,17 +72,15 @@ docker/                               # Dockerfile + compose + Postgres (próxim
 - Swagger / OpenAPI (próximo)
 - Vue.js frontend (próximo)
 
-
-
 ## Checklist da entrega
 
 - [x] Pacote `domain` + classes de domínio
 - [x] Pacote `domaintest` + `CalculadoraProgressoTest`
 - [x] BLUE do 1º critério (progresso 3/9) — RED dos demais comentado no teste
 - [x] Evidências RED / GREEN / BLUE em `docs/evidencias/`
+- [x] README com US/BDD identificados por integrante
 - [ ] Camadas Service, Repository, Entity, DTO, Controller
 - [ ] Endpoint + Swagger
 - [ ] Frontend Vue.js
 - [ ] H2 e Postgres rodando (evidências)
 - [ ] Docker + docker-compose + Postgres + pgAdmin
-- [ ] README final com US/BDD identificados por integrante
