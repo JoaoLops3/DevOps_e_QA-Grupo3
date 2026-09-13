@@ -30,6 +30,9 @@ Arquivo: `docs/evidencias/us-bdd/USER STORIES_BDD.png`
 
 ![User Stories e BDD](docs/evidencias/us-bdd/USER%20STORIES_BDD.png)
 
+Arquivo: `docs/evidencias/us-bdd/USER STORIES_BDD2.png`
+![USER STORIES_BDD2.png](docs/evidencias/us-bdd/USER%20STORIES_BDD2.png)
+
 ## Estrutura do projeto (alinhada ao enunciado)
 
 ```
