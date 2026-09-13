@@ -19,7 +19,7 @@ Educação Continuada Gamificada (case passado em aula).
 | Integrante | Cenário BDD |
 |------------|-------------|
 | João Gabriel | Exibir concluídos e faltantes para os 12 (BLUE — implementado e ativo) |
-| Hector | Promover para Premium + 3 moedas ao atingir 12 (RED — pronto, comentado no teste) |
+| Hector Silveira | Promover para Premium + 3 moedas ao atingir 12 (RED — pronto, comentado no teste) |
 | Miguel Muran | Não contabilizar curso com média &lt; 7,0 (RED — pronto, comentado no teste) |
 
 ## Evidência — User Stories e BDD
