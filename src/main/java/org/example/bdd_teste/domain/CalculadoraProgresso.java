@@ -16,6 +16,7 @@ public class CalculadoraProgresso {
     }
 
     private int contarCursos(Aluno aluno) {
-        return aluno.getCursosConcluidos().size();
+        // BDD Miguel: só média ≥ 7,0 entra no progresso rumo ao Premium
+        return aluno.contarCursosValidos();
     }
 }

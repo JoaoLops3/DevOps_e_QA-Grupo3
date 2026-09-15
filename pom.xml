@@ -6,31 +6,20 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>4.1.1</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath/>
     </parent>
     <groupId>org.example</groupId>
     <artifactId>BDD_TESTE</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>BDD_TESTE</name>
     <description>Educação Continuada Gamificada — TDD/ATDD História 3QA (progresso assinatura básica)</description>
-    <url/>
-    <licenses>
-        <license/>
-    </licenses>
-    <developers>
-        <developer/>
-    </developers>
-    <scm>
-        <connection/>
-        <developerConnection/>
-        <tag/>
-        <url/>
-    </scm>
 
     <properties>
         <java.version>17</java.version>
         <jacoco.version>0.8.15</jacoco.version>
+        <springdoc.version>3.1.1</springdoc.version>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -40,19 +29,21 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webmvc</artifactId>
         </dependency>
-
-        <!-- H2: banco em memória (dev/test) — evidência do enunciado -->
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>runtime</scope>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
-        <!-- PostgreSQL: banco da entrega com Docker/pgAdmin -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>${springdoc.version}</version>
         </dependency>
 
         <dependency>
@@ -69,6 +60,33 @@
 
     <build>
         <plugins>
+            <!-- frontend/ é a fonte; static/ é espelho gerado no build -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>sync-frontend-to-static</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.basedir}/src/main/resources/static</outputDirectory>
+                            <overwrite>true</overwrite>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}/frontend</directory>
+                                    <excludes>
+                                        <exclude>README.md</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -79,24 +97,27 @@
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>${jacoco.version}</version>
                 <configuration>
-                    <!-- Boot Spring e package-info ficam fora da meta 100% do Domain BLUE -->
+                    <!-- Meta 100% só no domain; resto fora da cobertura exigida -->
                     <excludes>
                         <exclude>org/example/bdd_teste/BddTesteApplication.class</exclude>
                         <exclude>**/package-info.class</exclude>
+                        <exclude>org/example/bdd_teste/entity/**</exclude>
+                        <exclude>org/example/bdd_teste/dto/**</exclude>
+                        <exclude>org/example/bdd_teste/repository/**</exclude>
+                        <exclude>org/example/bdd_teste/service/**</exclude>
+                        <exclude>org/example/bdd_teste/controller/**</exclude>
+                        <exclude>org/example/bdd_teste/config/**</exclude>
+                        <exclude>org/example/bdd_teste/exception/**</exclude>
                     </excludes>
                 </configuration>
 
                 <executions>
-
-                    <!-- Instrumenta a aplicação antes dos testes -->
                     <execution>
                         <id>prepare-agent</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
-
-                    <!-- Gera relatório HTML -->
                     <execution>
                         <id>jacoco-report</id>
                         <phase>verify</phase>
@@ -104,7 +125,32 @@
                             <goal>report</goal>
                         </goals>
                     </execution>
-
+                    <execution>
+                        <id>jacoco-check</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <rule>
+                                    <element>BUNDLE</element>
+                                    <limits>
+                                        <limit>
+                                            <counter>LINE</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>1.0</minimum>
+                                        </limit>
+                                        <limit>
+                                            <counter>BRANCH</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>1.0</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                            </rules>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
         </plugins>

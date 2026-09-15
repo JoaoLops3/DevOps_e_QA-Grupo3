@@ -51,5 +51,5 @@ Observação: o vermelho do pacote raiz é o `BddTesteApplication` (boot Spring,
 
 Print da página `org.example.bdd_teste.domain`.
 
-![Pagina2-gree-domain.png](Pagina2-gree-domain.png)
+![Pagina2-green-domain.png](Pagina2-green-domain.png)
 No GREEN, vermelho do `Aluno` é esperado e aceito.

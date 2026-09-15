@@ -1,0 +1,11 @@
+target/
+.idea/
+.git/
+*.iml
+docs/
+frontend/
+HELP.md
+.dockerignore
+docker-compose.yml
+*.md
+!pom.xml

@@ -12,9 +12,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * DomainTest — TDD da História 3QA (Educação Continuada Gamificada)
  *
  * Mapeamento BDD ↔ TDD (tabela SCENARIO | EXECUTION | RESULTS):
- *   TDD 1 = BDD 1 (João Gabriel)  — BLUE ativo
- *   TDD 2 = BDD 2 (Hector)        — RED comentado
- *   TDD 3 = BDD 3 (Miguel Muran)  — RED comentado
+ *   TDD 1 = BDD 1 (João Gabriel)  — BLUE
+ *   TDD 2 = BDD 2 (Hector)        — BLUE
+ *   TDD 3 = BDD 3 (Miguel Muran)  — BLUE
  */
 class CalculadoraProgressoTest {
 
@@ -72,10 +72,10 @@ class CalculadoraProgressoTest {
         assertEquals(9, progresso.cursosFaltantes());
     }
 
-    /*
+    /**
      * =====================================================================
-     * TDD 2 — BDD 2 (Hector) — fase RED
-     * Evidência: docs/evidencias/red
+     * TDD 2 — BDD 2 (Hector) — fase BLUE
+     * Evidência RED histórica: docs/evidencias/red
      *
      * Dado que o aluno já concluiu 11 cursos válidos
      * E falta apenas 1 curso para completar os 12
@@ -84,7 +84,7 @@ class CalculadoraProgressoTest {
      * Então o plano deve ser promovido automaticamente para Premium
      * e o aluno deve receber as 3 moedas correspondentes
      * =====================================================================
-     *
+     */
     @Test
     void devePromoverParaPremiumEConcederMoedasAoAtingir12Cursos() {
         // SCENARIO
@@ -103,12 +103,11 @@ class CalculadoraProgressoTest {
         assertEquals(TipoAssinatura.PREMIUM, aluno.getTipoAssinatura());
         assertEquals(3, aluno.getMoedas());
     }
-     */
 
-    /*
+    /**
      * =====================================================================
-     * TDD 3 — BDD 3 (Miguel Muran) — fase RED
-     * Evidência: docs/evidencias/red
+     * TDD 3 — BDD 3 (Miguel Muran) — fase BLUE
+     * Evidência RED histórica: docs/evidencias/red
      *
      * Dado que o aluno concluiu um curso com média abaixo de 7,0
      * Quando o sistema recalcula o total de cursos concluídos
@@ -116,7 +115,7 @@ class CalculadoraProgressoTest {
      * Então esse curso não deve ser contabilizado no progresso
      * e o número de cursos faltantes deve permanecer inalterado
      * =====================================================================
-     *
+     */
     @Test
     void naoDeveContabilizarCursoComMediaAbaixoDeSete() {
         // SCENARIO
@@ -131,5 +130,41 @@ class CalculadoraProgressoTest {
         assertEquals(1, progresso.cursosConcluidos());
         assertEquals(11, progresso.cursosFaltantes());
     }
+
+    /**
+     * Garante que aluno já Premium não ganha moedas de novo
+     * e que o histórico de conclusões permanece acessível.
      */
+    @Test
+    void naoDevePromoverNovamenteQuandoJaEhPremium() {
+        var aluno = new Aluno(TipoAssinatura.PREMIUM, 3);
+        aluno.concluirCurso(new CursoConcluido(9.0));
+
+        var progresso = new CalculadoraProgresso().calcular(aluno);
+
+        assertEquals(TipoAssinatura.PREMIUM, aluno.getTipoAssinatura());
+        assertEquals(3, aluno.getMoedas());
+        assertEquals(1, aluno.getCursosConcluidos().size());
+        assertEquals(1, progresso.cursosConcluidos());
+        assertEquals(11, progresso.cursosFaltantes());
+    }
+
+    /**
+     * Rehidratação: 12 cursos válidos no histórico não alteram assinatura/moedas
+     * até uma nova conclusão via concluirCurso (efeito só na escrita).
+     */
+    @Test
+    void deveRestaurarHistoricoSemPromover() {
+        var aluno = new Aluno(TipoAssinatura.BASICA, 0);
+        for (int i = 0; i < 12; i++) {
+            aluno.restaurarCursoDoHistorico(new CursoConcluido(8.0));
+        }
+
+        var progresso = new CalculadoraProgresso().calcular(aluno);
+
+        assertEquals(TipoAssinatura.BASICA, aluno.getTipoAssinatura());
+        assertEquals(0, aluno.getMoedas());
+        assertEquals(12, progresso.cursosConcluidos());
+        assertEquals(0, progresso.cursosFaltantes());
+    }
 }
