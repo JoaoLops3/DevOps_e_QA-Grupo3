@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rumo Premium — Progresso 3QA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Sora:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/app.css" />
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js" defer></script>
+  <script src="/js/app.js" defer></script>
+</head>
+<body>
+  <div id="app" v-cloak>
+    <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+
+    <header class="top">
+      <p class="brand">Rumo Premium</p>
+      <p class="tagline">12 cursos válidos · média ≥ 7 · assinatura básica</p>
+    </header>
+
+    <main id="conteudo" class="layout">
+      <section class="panel" aria-labelledby="titulo-aluno">
+        <h1 id="titulo-aluno">Seu progresso</h1>
+        <p class="lead">Crie um aluno, registre conclusões e acompanhe o caminho até o Premium.</p>
+
+        <form class="form-row" @submit.prevent="criarAluno">
+          <label for="nome">Nome do aluno</label>
+          <div class="inline">
+            <input id="nome" v-model.trim="nomeNovo" type="text" name="nome" autocomplete="name" placeholder="Ex.: Ana Souza" required />
+            <button type="submit" :disabled="loading">Criar aluno</button>
+          </div>
+        </form>
+
+        <div v-if="loading" class="state state-loading" role="status" aria-live="polite">
+          <span class="spinner" aria-hidden="true"></span>
+          Carregando…
+        </div>
+
+        <div v-else-if="erro" class="state state-error" role="alert">
+          <p>{{ erro }}</p>
+          <button type="button" class="btn-ghost" @click="carregarAlunos">Tentar de novo</button>
+        </div>
+
+        <div v-else-if="alunos.length === 0" class="state state-empty">
+          <p>Nenhum aluno ainda. Crie o primeiro para começar o progresso.</p>
+        </div>
+
+        <div v-else class="aluno-block">
+          <label for="alunoId">Aluno ativo</label>
+          <select id="alunoId" v-model.number="alunoId" @change="carregarProgresso">
+            <option v-for="a in alunos" :key="a.id" :value="a.id">
+              {{ a.nome }} (id {{ a.id }}) — {{ a.tipoAssinatura }}
+            </option>
+          </select>
+
+          <div v-if="progresso" class="progresso" aria-live="polite">
+            <div class="stats">
+              <p><span class="stat-label">Assinatura</span> <strong>{{ progresso.tipoAssinatura }}</strong></p>
+              <p><span class="stat-label">Moedas</span> <strong>{{ progresso.moedas }}</strong></p>
+              <p><span class="stat-label">Meta</span> <strong>{{ progresso.cursosConcluidos }}/12</strong></p>
+            </div>
+
+            <p class="progresso-texto" id="barra-label">
+              {{ progresso.cursosConcluidos }} concluídos · {{ progresso.cursosFaltantes }} faltantes
+            </p>
+
+            <div
+              class="trilha"
+              role="progressbar"
+              :aria-valuenow="progresso.cursosConcluidos"
+              aria-valuemin="0"
+              aria-valuemax="12"
+              aria-labelledby="barra-label"
+            >
+              <span
+                v-for="n in 12"
+                :key="n"
+                class="slot"
+                :class="{ preenchido: n <= progresso.cursosConcluidos }"
+              ></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="titulo-conclusao" :aria-disabled="!alunoId">
+        <h2 id="titulo-conclusao">Registrar conclusão</h2>
+        <p class="lead">Só entra no progresso se a média for 7,0 ou maior.</p>
+
+        <form class="stack" @submit.prevent="registrarConclusao">
+          <label for="titulo">Título do curso</label>
+          <input id="titulo" v-model.trim="conclusao.tituloCurso" type="text" required :disabled="!alunoId" placeholder="Ex.: Testes com TDD" />
+
+          <label for="media">Média (0 a 10)</label>
+          <input id="media" v-model.number="conclusao.media" type="number" min="0" max="10" step="0.1" required :disabled="!alunoId" />
+
+          <button type="submit" :disabled="!alunoId || loading">Salvar conclusão</button>
+        </form>
+
+        <p v-if="sucesso" class="state state-success" role="status">{{ sucesso }}</p>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <p>API 3QA · <a href="/swagger-ui.html">Swagger</a></p>
+    </footer>
+  </div>
+</body>
+</html>
