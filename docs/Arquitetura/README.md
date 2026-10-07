@@ -1,82 +1,159 @@
-# Documentação de Decisões Arquiteturais (Architecture Lab — AC2)
+# Documentação Arquitetural Vivo — Plataforma de Gamificação para Educação Continuada (B1)
 
-*Baseado no enunciado disponível em: `docs/Arquitetura/ExB1_Desafio_1_Decisoes_Arquiteturais_Tech_Lead.docx`*
+## Identificação do Projeto
 
-## DECISÃO 1 — Devemos migrar agora para microsserviços?
-**Posição:** (C) Ainda não há informação suficiente (mas fortemente inclinado para Não).
+- **Equipe:** João Gabriel, Hector Silveira, Miguel Muran
+- **Repositório Git:** https://github.com/JoaoLops3/DevOps_e_QA-Grupo3.git
+- **Disciplina:** Architecture Lab B1
 
-**Análise do Tech Lead:**
-Com 1.000 utilizadores e uma equipa de 6 programadores a operar um MVP funcional, introduzir microsserviços neste momento geraria uma complexidade acidental desnecessária.
-*   **RFs (Requisitos Funcionais):** A aplicação atende atualmente às regras de negócio de ranking, cursos, moedas, badges e recompensas.
-*   **RNFs (Requisitos Não Funcionais) faltantes:** Faltam dados sobre projeções exatas de acesso, requisitos de alta disponibilidade (SLAs), limites de latência aceitáveis, maturidade da equipa em práticas de DevOps e orçamento para infraestrutura.
-*   **De RNF a ASR:** Um RNF só se transforma num Requisito Arquiteturalmente Significativo (ASR) quando as suas exigências não podem ser satisfeitas pela estrutura atual (monólito único com base de dados relacional), obrigando a uma mudança estrutural profunda na aplicação.
+## 1. Visão Geral
 
-## MUDANÇA DE CENÁRIO 1 — O PRODUTO CRESCEU
-**DECISÃO 2 — A arquitetura atual continua adequada?**
-Não. O aumento para 100.000 utilizadores e a carga concentrada e desproporcional no módulo de ranking tornam o modelo atual ineficiente.
+A plataforma de Educação Continuada Gamificada nasce como um MVP de progresso de assinatura (cursos concluídos, moedas e promoção para Premium) e, no Architecture Lab B1, passa a sustentar escala, inteligência e operação contínua. O registo abaixo acumula as decisões dos seis desafios: o que permanece no Core, o que sai para um serviço próprio e o que fica na borda de integração.
 
-### Comparação de Alternativas
+- **Contexto da AC1:** o MVP é um monólito em Java/Spring Boot com banco relacional. Atende cerca de 1.000 usuários nos fluxos de ranking, cursos, moedas, badges e recompensas. Uma base de código, um processo e um schema bastam para a equipa de seis pessoas entregar e operar o produto.
+- **Evolução para o B1:** a meta sobe para 100.000 usuários e para múltiplas instituições. Entram um motor de recomendação e um assistente educacional com RAG/LLM em Python, mensageria assíncrona para efeitos secundários da conclusão de curso, ingestão de eventos IoT de laboratórios via MQTT, pipeline de CI/CD no Jenkins e observabilidade com Prometheus e Grafana. A escala e o isolamento de falha passam a ditar a fronteira de cada componente; a decomposição em microsserviços granulares continua fora de escopo.
 
-| Alternativa | Benefício | Custo/risco | ASR que justificaria |
-| :--- | :--- | :--- | :--- |
-| **Monólito em camadas** | Baixa complexidade operacional e um único processo de deploy. | Escala ineficiente (desperdício de recursos ao escalar partes ociosas) e gargalo na base de dados única. | Time-to-market rápido, Manutenibilidade básica. |
-| **Monólito modular** | Forte separação lógica do código sem impacto na infraestrutura de rede. | Partilha dos mesmos limites físicos de CPU/Memória; risco de acoplamento oculto. | Manutenibilidade, Preparação para evolução. |
-| **Serviço(s) independente(s)** | Escala cirúrgica apenas das partes exigidas (ranking) e liberdade tecnológica. | Alta complexidade operacional (monitorização, CI/CD, consistência eventual). | **Escalabilidade** independente, **Desempenho**. |
+## 2. Matriz Cumulativa de ASRs (Requisitos Arquiteturalmente Significativos)
 
-### Questões para Discussão
-*   **Se somente o ranking exige mais capacidade, precisamos escalar todo o sistema?** Não precisamos (nem devemos) escalar todo o sistema junto.
-*   **Qual alternativa possui menor complexidade operacional?** O monólito em camadas e o monólito modular.
-*   **Qual alternativa permite maior independência de evolução?** A extração para serviço(s) independente(s).
-*   **A equipa atual possui maturidade para operar uma solução distribuída?** Provavelmente não; uma equipa de 6 programadores sofrerá com a sobrecarga de gerir múltiplos serviços.
-*   **Qual custo estamos aceitando ao escolher maior autonomia?** O drástico aumento da complexidade de infraestrutura, gestão de rede e tratamento de falhas distribuídas.
+| ID | Desafio | ASR | Atributo (FURPS+) | Impacto na Arquitetura |
+| :--- | :--- | :--- | :--- | :--- |
+| **ASR-01** | D1 — Evolução do Core | Suporte a 100.000 usuários com isolamento do módulo de Ranking | Performance / Maintainability | Define as fronteiras internas de módulos no Monólito Modular. |
+| **ASR-02** | D1 — Evolução do Core | Minimização da complexidade operacional para equipe de 6 pessoas | Usability / Operation | Descarta a decomposição prematura em microsserviços. |
+| **ASR-03** | D2 — Organização Interna | Isolamento das regras de gamificação contra mudanças tecnológicas | Supportability / Testability | Aplica Arquitetura Hexagonal (Ports & Adapters) no domínio do Core. |
+| **ASR-04** | D2 — Organização Interna | Testabilidade da lógica de negócio sem dependência de BD/Spring | Testability | Desacopla o Domain Core de frameworks externos (JPA/Spring). |
+| **ASR-05** | D3 — Serviço Python & IA | Isolamento de tecnologia e ciclo de vida do motor de IA em Python | Interoperability / Deploy | Cria um serviço independente em FastAPI para recomendação e RAG. |
+| **ASR-06** | D3 — Serviço Python & IA | Degradation graciosa: falhas na IA não bloqueiam cursos/pontos | Reliability / Fault Tolerance | Implementa Circuit Breaker (Resilience4j) e Fallbacks no Core Java. |
+| **ASR-07** | D4 — Comunicação & Eventos | Processamento assíncrono para tarefas secundárias pós-conclusão | Performance / Latency | Usa eventos para notificações, badges e analytics sem bloquear o aluno. |
+| **ASR-08** | D4 — Comunicação & Eventos | Garantia de entrega e reprocessamento em caso de falha | Reliability / Recoverability | Introduz broker RabbitMQ com filas e suporte a Dead Letter Queues (DLQ). |
+| **ASR-09** | D5 — IoT & MQTT | Comunicação leve e eficiente para microcontroladores restritos | Efficiency / Network | Adota protocolo MQTT (Eclipse Mosquitto) em vez de REST HTTP. |
+| **ASR-10** | D5 — IoT & MQTT | Proteção e isolamento do Core contra oscilações de rede IoT | Reliability / Isolation | Cria o componente IoT Gateway Consumer entre o Mosquitto e o RabbitMQ. |
+| **ASR-11** | D6 — CI/CD & Observabilidade | Pipelines de CI/CD autônomas por componente com bloqueio | Testability / Deployability | Estrutura pipelines multibranch independentes no Jenkins. |
+| **ASR-12** | D6 — CI/CD & Observabilidade | Observabilidade centralizada em tempo real de latência e erros | Operability / Observability | Instrumenta Micrometer/Prometheus e dashboards centralizados no Grafana. |
 
+## 3. Resumo dos Registros de Decisão Arquitetural (ADRs)
 
-## MUDANÇA DE CENÁRIO 2 — CHEGOU A IA
-**DECISÃO 3 — Onde deve ficar a capacidade de recomendação?**
-Deve ficar como um **serviço independente em Python**.
+1. [ADR-001: Adoção do Monólito Modular no Core Java/Spring Boot](./adr/ADR-001-monolito-modular.md)
+2. [ADR-002: Organização do Módulo de Gamificação com Arquitetura Hexagonal](./adr/ADR-002-arquitetura-hexagonal.md)
+3. [ADR-003: Separação do Serviço de IA em Python (FastAPI) e Resiliência via Circuit Breaker](./adr/ADR-003-servico-python-ia.md)
+4. [ADR-004: Mensageria Assíncrona com RabbitMQ para Eventos de Gamificação e Notificação](./adr/ADR-004-mensageria-assincrona.md)
+5. [ADR-005: Ingestão de Eventos IoT via Broker MQTT e Componente Gateway](./adr/ADR-005-integracao-iot-mqtt.md)
+6. [ADR-006: Esteira CI/CD Independente no Jenkins e Monitoramento com Prometheus/Grafana](./adr/ADR-006-cicd-observabilidade.md)
 
-**Justificativa (ASRs):**
-A decisão sustenta-se nos ASRs de **Tolerância a falhas** (a queda da recomendação não pode impedir a conclusão de cursos no Core), **Escalabilidade** (o modelo recebe carga 10 vezes maior em determinados períodos) e **Deploy independente** (o modelo evolui num ciclo próprio de atualização).
+## 4. C4 Architecture Overview (Nível Container)
 
-**Provocação — Foi o Python que criou o microsserviço?**
-Não. A restrição tecnológica de usar Python não justifica, isoladamente, a criação de um microsserviço (poderiam ser executados scripts locais ou tarefas em segundo plano). O que obriga a arquitetura distribuída é a combinação da tecnologia com os ASRs de tolerância a falhas e picos de carga independentes.
+```puml
+@startuml c4-container-overview
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
 
+title Plataforma de Gamificação — Educação Continuada (B1) — C4 Container
 
-## MUDANÇA DE CENÁRIO 3 — COMUNICAÇÃO E FALHA
-**DECISÃO 4 — O Core deve esperar a notificação responder?**
-**Não.** O registo de conclusão, o cálculo da recompensa e a atualização de dados exigem consistência imediata (comunicação **síncrona** interna). O envio da notificação deve ser **assíncrono** (mensageria), garantindo que a sua indisponibilidade temporária não impeça a conclusão do curso.
+Person(aluno_web, "Aluno Web", "Browser")
+Person(aluno_mobile, "Aluno Mobile", "App")
+Person(dispositivo_iot, "Dispositivo IoT", "Microcontrolador de laboratório")
 
-### Questões para Discussão
-*   **REST significa necessariamente microsserviços?** Não. REST é um estilo arquitetural de comunicação de rede que pode perfeitamente ser utilizado num monólito.
-*   **Quando a comunicação síncrona é suficiente?** Quando a resposta é imediatamente obrigatória para a progressão do negócio e o serviço de destino possui altíssima fiabilidade.
-*   **Qual ASR poderia justificar mensageria?** Tolerância a falhas e Desempenho (desacoplamento temporal).
-*   **O que muda quando o consumidor está temporariamente indisponível?** A mensagem fica retida de forma segura na fila até à recuperação do serviço, sem impactar o produtor.
-*   **RabbitMQ ou Kafka devem ser adotados apenas porque estão disponíveis?** Não. Em cenários mais simples, a implementação de filas virtuais na própria base de dados relacional (*Outbox Pattern*) resolve o problema sem onerar a equipa com complexidade infraestrutural desnecessária.
+System_Boundary(plataforma, "Plataforma de Gamificação") {
+    Container(core, "Core", "Java, Spring Boot, Spring Modulith", "Monólito modular com Ports & Adapters. Cursos, pontos, ranking e publicação de eventos.")
+    Container(ai, "AI Service", "Python, FastAPI", "Recomendação e assistente educacional com RAG/LLM.")
+    Container(iot_gateway, "IoT Gateway Consumer", "Adaptador de borda", "Isola o Core das oscilações da rede IoT. Consome MQTT e publica no broker.")
+    ContainerQueue(rabbit, "RabbitMQ", "AMQP", "Eventos de gamificação, notificações, badges, analytics e DLQ.")
+    ContainerQueue(mosquitto, "Mosquitto", "MQTT", "Ingestão de telemetria dos laboratórios.")
+    ContainerDb(postgres, "PostgreSQL", "Banco relacional", "Estado transacional de alunos, cursos, moedas e recompensas.")
+    ContainerDb(vectordb, "Vector DB", "ChromaDB ou PGVector", "Embeddings do assistente RAG.")
+}
 
+System_Boundary(operacao, "Operação") {
+    Container(jenkins, "Jenkins", "CI/CD", "Pipelines multibranch independentes por componente, com bloqueio em falha de teste.")
+    Container(prometheus, "Prometheus", "Métricas", "Latência, erros e throughput.")
+    Container(grafana, "Grafana", "Dashboards", "Latência p95 e throughput em tempo real.")
+}
 
-## REGISTRO DA PRIMEIRA DECISÃO — ADR
+Rel(aluno_web, core, "Usa", "HTTPS")
+Rel(aluno_mobile, core, "Usa", "HTTPS")
+Rel(dispositivo_iot, mosquitto, "Publica eventos", "MQTT")
+Rel(mosquitto, iot_gateway, "Entrega telemetria", "MQTT")
+Rel(iot_gateway, rabbit, "Publica evento normalizado", "AMQP")
+Rel(core, rabbit, "Publica e consome", "AMQP")
+Rel(core, ai, "Solicita recomendação e RAG", "HTTPS")
+Rel(core, postgres, "Lê e escreve", "JDBC")
+Rel(ai, vectordb, "Consulta embeddings", "HTTP")
+Rel(jenkins, core, "Constrói e promove", "Pipeline")
+Rel(jenkins, ai, "Constrói e promove", "Pipeline")
+Rel(core, prometheus, "Expõe métricas", "Micrometer")
+Rel(ai, prometheus, "Expõe métricas", "HTTP")
+Rel(grafana, prometheus, "Consulta", "PromQL")
 
-| Parâmetro | Detalhe |
-| :--- | :--- |
-| **Contexto** | O sistema atingiu 100.000 utilizadores e o módulo de ranking sofre com carga desproporcional. A inclusão da IA traz picos de 10x de acesso. |
-| **ASRs** | Escalabilidade independente, Desempenho, Tolerância a falhas, Deploy independente. |
-| **Alternativas consideradas** | 1. Escalar o monólito inteiro. 2. Monólito Modular. 3. Extrair Ranking e IA para serviços independentes (escolhido). |
-| **Decisão** | Isolar estritamente o módulo de Ranking e o modelo de IA em serviços independentes, mantendo o domínio principal (cursos, recompensas, moedas) no Core. |
-| **Consequências / trade-offs** | **Prós:** Protege o Core contra picos de acesso e falhas externas. **Contras:** Aumento do esforço em automação de CI/CD, monitorização de rede e gestão de dados distribuídos. |
+@enduml
+```
 
-### C4 — Representar a Decisão
-No nível de Container (C4), o "Monólito Spring Boot" atual perde os componentes de Ranking e Recomendação. Surgem novos contêineres no diagrama: "Serviço de Ranking" (com a sua própria base de dados otimizada) e "Serviço de Recomendação IA", comunicando de forma síncrona (leituras de ranking) e assíncrona (mensageria para atualizações de pontuação/notificações) com o Core.
+## 5. Síntese para a Avaliação Final (AF)
 
+A prova de conceito da AF demonstra a cadeia que os ASRs exigem, do domínio isolado até a telemetria de operação:
 
-## FECHAMENTO
+- **Core Java/Spring Boot:** validação do isolamento modular via Spring Modulith e testes de domínio sem framework.
+- **Serviço Python / FastAPI:** endpoint de recomendação e RAG com fallback ativado por simulação de falha no Circuit Breaker.
+- **RabbitMQ & IoT Integration:** fluxo completo de ingestão MQTT → IoT Gateway → RabbitMQ → processamento do Core.
+- **Observabilidade:** coleta de métricas em tempo real no Prometheus com exibição de latência p95 e throughput no Grafana durante testes de carga.
 
-1. **Qual foi o requisito que mais influenciou a decisão arquitetural da equipe?**
-   O requisito de escalabilidade assimétrica do ranking e o isolamento dos picos de carga (10x) do novo modelo de recomendação de IA.
-2. **O sistema precisa realmente de microsserviços neste momento? Justifique com ASRs.**
-   Não precisa de microsserviços granulares em larga escala, mas sim de uma Arquitetura Orientada a Serviços (SOA/Híbrida). A extração cirúrgica justifica-se estritamente pelos ASRs de **Escalabilidade Independente** (Ranking/IA) e **Tolerância a Falhas** (notificações e IA).
-3. **Qual decisão mudaria se o requisito de escala independente desaparecesse?**
-   A equipa manteria toda a aplicação sob a forma de um **Monólito Modular**. Sem a necessidade de escalar componentes de forma independente, a complexidade de infraestrutura e rede não se justificaria.
-4. **Qual trade-off sua equipe aceitou conscientemente?**
-   O aumento substancial da **complexidade operacional** (múltiplos processos de deploy, gestão de rede e monitorização) em prol de garantir a disponibilidade e estabilidade do fluxo principal do aluno.
-5. **Que evidência futura poderia comprovar que a decisão foi adequada?**
-   Métricas de telemetria demonstrando que, durante picos de utilização da IA ou consultas intensas ao ranking, o consumo de recursos (CPU e Memória) do Core permaneceu estável e a taxa de sucesso nas conclusões de curso não sofreu interrupções nem degradação de desempenho.
+## 6. Rastreabilidade por Desafio (RF → Evidência)
+
+Abaixo está a trilha arquitetural exigida, comprovando que cada decisão resolve um problema real da plataforma.
+
+### Desafio 1 — Drivers e Evolução do Core
+
+- **RF:** RF01 (Ranking), RF02 (Conquistas).
+- **RNF (FURPS+):** Desempenho, Escalabilidade, Manutenibilidade e Complexidade Operacional.
+- **ASRs (Por que virou ASR?):**
+  - *ASR-01 (Desempenho/Escala):* Altera a estrutura do código para isolar o crescimento do Ranking sem afetar Cursos.
+  - *ASR-02 (Complexidade):* Restringe o modelo de implantação para não sobrecarregar a equipe de 6 devs com infraestrutura distribuída.
+- **RPC:** RPC-01 (Core Java/Spring Boot), RPC-02 (Equipe de 6 devs).
+- **Rastreabilidade:** [ADR-001](./adr/ADR-001-monolito-modular.md) → [C4 Container](./diagramas/c4-container-overview.puml) → [Evidência: Lab 01 (Spring Modulith)](../../labs/lab01-spring-modulith/)
+
+### Desafio 2 — Organização Interna do Core
+
+- **RF:** RF01, RF02 (Regras de Gamificação).
+- **RNF (FURPS+):** Modificabilidade e Testabilidade.
+- **ASRs (Por que virou ASR?):**
+  - *ASR-03 (Modificabilidade):* Exige a inversão de dependência (Ports & Adapters) para blindar o domínio contra trocas de banco de dados.
+  - *ASR-04 (Testabilidade):* Altera a forma como os testes rodam, exigindo execução em milissegundos sem contexto do framework.
+- **RPC:** RPC-04 (Reaproveitamento das regras em Spring Boot).
+- **Rastreabilidade:** [ADR-002](./adr/ADR-002-arquitetura-hexagonal.md) → [C4 Component](./diagramas/c4-component-core.puml) → [Evidência: Lab 02 (Domain Isolation)](../../labs/lab02-domain-isolation/)
+
+### Desafio 3 — Serviço Python e IA
+
+- **RF:** RF03 (Recomendação inteligente), RF04 (Assistente educacional RAG).
+- **RNF (FURPS+):** Deploy Independente, Interoperabilidade e Tolerância a Falhas.
+- **ASRs (Por que virou ASR?):**
+  - *ASR-05 (Deploy Independente):* Altera o modelo de implantação, exigindo um container/serviço apartado para o ecossistema Python.
+  - *ASR-06 (Tolerância a Falhas):* Altera a comunicação do Core, exigindo o padrão Circuit Breaker para garantir que o fluxo principal não trave.
+- **RPC:** RPC-05 (Modelos em Python), RPC-06 (Indisponibilidade da IA não bloqueia fluxo).
+- **Rastreabilidade:** [ADR-003](./adr/ADR-003-servico-python-ia.md) → [C4 Container](./diagramas/c4-container-overview.puml) → [Evidência: Lab 03 (Python CB)](../../labs/lab03-python-circuitbreaker/)
+
+### Desafio 4 — Comunicação e Eventos
+
+- **RF:** RF02 (Conquistas), RF05 (Notificações após conclusão de curso).
+- **RNF (FURPS+):** Desacoplamento Temporal, Latência e Recuperabilidade.
+- **ASRs (Por que virou ASR?):**
+  - *ASR-07 (Latência):* Altera a comunicação de síncrona para assíncrona baseada em eventos para manter a resposta < 200ms.
+  - *ASR-08 (Recuperabilidade):* Exige a adição de um Message Broker com DLQ para armazenar eventos não entregues sem perdas.
+- **RPC:** RPC-06 (Falha em notificação não afeta conclusão), RPC-07 (Broker com baixo custo operacional).
+- **Rastreabilidade:** [ADR-004](./adr/ADR-004-mensageria-assincrona.md) → [C4 Sequence](./diagramas/c4-sequence-desafio4.puml) / [C4 Container](./diagramas/c4-container-overview.puml) → [Evidência: Lab 04 (RabbitMQ)](../../labs/lab04-rabbitmq-resilience/)
+
+### Desafio 5 — IoT e MQTT
+
+- **RF:** RF06 (Receber eventos físicos IoT de laboratórios).
+- **RNF (FURPS+):** Eficiência de Comunicação e Resiliência a Conexões Intermitentes.
+- **ASRs (Por que virou ASR?):**
+  - *ASR-09 (Eficiência):* Altera o protocolo de rede de HTTP para MQTT devido aos recursos limitados dos microcontroladores.
+  - *ASR-10 (Isolamento):* Adiciona um componente Gateway à estrutura para impedir que dispositivos físicos acessem a rede privada do Core.
+- **RPC:** RPC-08 (Dispositivos simples com rede instável).
+- **Rastreabilidade:** [ADR-005](./adr/ADR-005-integracao-iot-mqtt.md) → [C4 Container](./diagramas/c4-container-overview.puml) → [Evidência: Lab 05 (MQTT Gateway)](../../labs/lab05-mqtt-gateway/)
+
+### Desafio 6 — CI/CD e Observabilidade
+
+- **RF:** Todos os RFs impactados, operação da solução.
+- **RNF (FURPS+):** Testabilidade Contínua, Deployability e Observabilidade.
+- **ASRs (Por que virou ASR?):**
+  - *ASR-11 (Pipelines Autônomas):* Altera a estrutura de CI/CD para múltiplas esteiras, isolando falhas de build por serviço.
+  - *ASR-12 (Observabilidade):* Exige a instrumentação ativa de métricas (Prometheus) na comunicação e nos nós para comprovação real de ASRs (ex: p95 de latência).
+- **RPC:** RPC-10 (Jenkins), RPC-11 (Prometheus/Grafana).
+- **Rastreabilidade:** [ADR-006](./adr/ADR-006-cicd-observabilidade.md) → [C4 Deployment](./diagramas/c4-deployment.puml) → [Evidência: Lab 06 (Jenkins/Prometheus)](../../labs/lab06-jenkins-prometheus/)
