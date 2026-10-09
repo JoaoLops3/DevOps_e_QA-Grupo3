@@ -1,0 +1,41 @@
+@startuml c4-component-core
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+title Core Application — Módulo de Gamificação (Desafio 2)\nC4 Nível Component — Ports & Adapters
+
+Container_Ext(client, "Web / Mobile App", "React / Mobile", "Cliente que consome a API de gamificação.")
+ContainerDb_Ext(postgres, "PostgreSQL", "Banco relacional", "Persistência de recompensas, moedas e progresso.")
+ContainerQueue_Ext(rabbit, "RabbitMQ", "AMQP", "Broker de eventos da plataforma.")
+
+Container_Boundary(core, "Core Application — Módulo de Gamificação") {
+
+    Component(rest, "GamificationRestController", "Inbound Adapter, Spring MVC", "Expõe HTTP/REST. Traduz request/response para a porta de entrada. Sem regra de negócio.")
+
+    Component(in_port, "GamificationServicePort", "Inbound Port", "Contrato do caso de uso: registrar conclusão, consultar progresso, aplicar recompensa.")
+
+    Component(engine, "GamificationEngine", "Domain Core, Java puro", "Orquestra o fluxo de gamificação. POJO sem anotações Spring/JPA.")
+    Component(badge, "BadgePolicy", "Domain Core, Java puro", "Regras de concessão de badges. POJO sem anotações Spring/JPA.")
+    Component(reward, "RewardCalculator", "Domain Core, Java puro", "Cálculo de moedas e promoção Premium. POJO sem anotações Spring/JPA.")
+
+    Component(persist_port, "RewardPersistencePort", "Outbound Port", "Contrato de persistência de recompensas e progresso. Sem SQL e sem JPA.")
+    Component(event_port, "EventPublisherPort", "Outbound Port", "Contrato de publicação de eventos de domínio (ex.: CursoConcluidoEvent).")
+
+    Component(jpa, "JpaRewardAdapter", "Outbound Adapter, Spring Data JPA", "Implementa RewardPersistencePort. Mapeia domínio ↔ entidade JPA.")
+    Component(amqp, "RabbitMQEventAdapter", "Outbound Adapter, Spring AMQP", "Implementa EventPublisherPort. Publica no RabbitMQ.")
+}
+
+Rel(client, rest, "Chama endpoints de gamificação", "HTTP/REST")
+Rel(rest, in_port, "Delega o caso de uso", "chamada in-process")
+Rel(in_port, engine, "Invoca o domínio", "chamada in-process")
+Rel(engine, badge, "Avalia regras de badge", "chamada in-process")
+Rel(engine, reward, "Calcula moedas e Premium", "chamada in-process")
+Rel(engine, persist_port, "Persiste progresso e recompensa", "porta de saída")
+Rel(engine, event_port, "Publica evento após conclusão", "porta de saída")
+Rel(persist_port, jpa, "Implementado por", "")
+Rel(event_port, amqp, "Implementado por", "")
+Rel(jpa, postgres, "Lê e escreve", "JDBC / JPA")
+Rel(amqp, rabbit, "Publica CursoConcluidoEvent", "AMQP")
+
+@enduml
