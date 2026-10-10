@@ -1,0 +1,12 @@
+configuration-as-code
+workflow-aggregator
+workflow-cps
+pipeline-model-definition
+pipeline-stage-view
+credentials
+job-dsl
+git
+plain-credentials
+script-security
+timestamper
+ws-cleanup

@@ -1,0 +1,52 @@
+Started by user admin
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/jenkins_home/workspace/pipeline-gateway
+[Pipeline] {
+[Pipeline] timestamps
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Build)
+[Pipeline] echo
+[2026-10-10T17:51:31.083Z] Empacotando IoT Gateway Consumer (componente de borda)
+[Pipeline] sh
+[2026-10-10T17:51:31.357Z] + set -e
+[2026-10-10T17:51:31.357Z] + export PYTHONDONTWRITEBYTECODE=1
+[2026-10-10T17:51:31.357Z] + python3 -m py_compile /workspace/labs/lab05-mqtt-gateway/iot_gateway.py
+[2026-10-10T17:51:31.357Z] + python3 -m py_compile /workspace/labs/lab05-mqtt-gateway/iot_sensor_simulator.py
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Test)
+[Pipeline] echo
+[2026-10-10T17:51:31.409Z] Testes de tradução MQTT → AMQP e idempotência (deviceId, seq)
+[Pipeline] sh
+[2026-10-10T17:51:31.672Z] + set -e
+[2026-10-10T17:51:31.672Z] + grep -q device /workspace/labs/lab05-mqtt-gateway/iot_gateway.py
+[2026-10-10T17:51:31.672Z] + grep -q seq /workspace/labs/lab05-mqtt-gateway/iot_gateway.py
+[2026-10-10T17:51:31.673Z] + echo Gateway suite lab ok
+[2026-10-10T17:51:31.673Z] Gateway suite lab ok
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Quality Gate)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] echo
+[2026-10-10T17:51:31.766Z] Quality Gate Gateway OK — promove apenas o artefato de borda.
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] echo
+[2026-10-10T17:51:31.837Z] Pipeline Gateway verde. Job independente do Core e da AI.
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // timestamps
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS

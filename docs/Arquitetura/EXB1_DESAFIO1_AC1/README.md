@@ -5,8 +5,8 @@
 ## DECISÃO 1 — Devemos migrar agora para microsserviços?
 **Posição:** (C) Ainda não há informação suficiente (mas fortemente inclinado para Não).
 
-**Análise do Tech Lead:**
-Com 1.000 utilizadores e uma equipa de 6 programadores a operar um MVP funcional, introduzir microsserviços neste momento geraria uma complexidade acidental desnecessária.
+**Análise (papel de Tech Lead):**
+Com 1.000 utilizadores e uma equipe de 6 desenvolvedores a operar um MVP funcional, introduzir microsserviços neste momento geraria complexidade acidental desnecessária.
 *   **RFs (Requisitos Funcionais):** A aplicação atende atualmente às regras de negócio de ranking, cursos, moedas, badges e recompensas.
 *   **RNFs (Requisitos Não Funcionais) faltantes:** Faltam dados sobre projeções exatas de acesso, requisitos de alta disponibilidade (SLAs), limites de latência aceitáveis, maturidade da equipa em práticas de DevOps e orçamento para infraestrutura.
 *   **De RNF a ASR:** Um RNF só se transforma num Requisito Arquiteturalmente Significativo (ASR) quando as suas exigências não podem ser satisfeitas pela estrutura atual (monólito único com base de dados relacional), obrigando a uma mudança estrutural profunda na aplicação.
@@ -56,16 +56,18 @@ Não. A restrição tecnológica de usar Python não justifica, isoladamente, a 
 
 ## REGISTRO DA PRIMEIRA DECISÃO — ADR
 
+> **Decisão vigente do B1:** ver [ADR-001](../adr/ADR-001-monolito-modular.md) (monólito modular) e [ADR-003](../adr/ADR-003-servico-python-ia.md) (IA como serviço). O texto abaixo foi alinhado a essas ADRs — Ranking permanece no Core; só a IA sai para processo próprio.
+
 | Parâmetro | Detalhe |
 | :--- | :--- |
 | **Contexto** | O sistema atingiu 100.000 utilizadores e o módulo de ranking sofre com carga desproporcional. A inclusão da IA traz picos de 10x de acesso. |
-| **ASRs** | Escalabilidade independente, Desempenho, Tolerância a falhas, Deploy independente. |
-| **Alternativas consideradas** | 1. Escalar o monólito inteiro. 2. Monólito Modular. 3. Extrair Ranking e IA para serviços independentes (escolhido). |
-| **Decisão** | Isolar estritamente o módulo de Ranking e o modelo de IA em serviços independentes, mantendo o domínio principal (cursos, recompensas, moedas) no Core. |
-| **Consequências / trade-offs** | **Prós:** Protege o Core contra picos de acesso e falhas externas. **Contras:** Aumento do esforço em automação de CI/CD, monitorização de rede e gestão de dados distribuídos. |
+| **ASRs** | Isolamento lógico do Ranking (ASR-01), baixa complexidade operacional para 6 devs (ASR-02); depois, deploy/tolerância da IA (ASR-05/06). |
+| **Alternativas consideradas** | 1. Monólito em camadas. 2. Monólito Modular (escolhido para o Core). 3. Extrair Ranking+IA agora (adiado para Ranking; adotado só para IA no Desafio 3). |
+| **Decisão** | Manter Ranking, cursos e recompensas no **Core monólito modular** (Spring Modulith). Extrair apenas o motor de IA para serviço Python quando os ASRs de falha/ciclo de vida exigirem (ADR-003). |
+| **Consequências / trade-offs** | **Prós:** fronteira de Ranking testável sem rede; equipe não opera microsserviços prematuros. **Contras:** Ranking ainda compartilha CPU/heap do Core até telemetria justificar extração. |
 
 ### C4 — Representar a Decisão
-No nível de Container (C4), o "Monólito Spring Boot" atual perde os componentes de Ranking e Recomendação. Surgem novos contêineres no diagrama: "Serviço de Ranking" (com a sua própria base de dados otimizada) e "Serviço de Recomendação IA", comunicando de forma síncrona (leituras de ranking) e assíncrona (mensageria para atualizações de pontuação/notificações) com o Core.
+No nível de Container (C4), o Core Spring Boot permanece monólito modular (Ranking interno com API de módulo). Surge o contêiner **AI Service** (FastAPI) para recomendação/RAG, com Circuit Breaker no Core — ver diagramas em [`../diagramas/`](../diagramas/).
 
 
 ## FECHAMENTO
@@ -73,10 +75,10 @@ No nível de Container (C4), o "Monólito Spring Boot" atual perde os componente
 1. **Qual foi o requisito que mais influenciou a decisão arquitetural da equipe?**
    O requisito de escalabilidade assimétrica do ranking e o isolamento dos picos de carga (10x) do novo modelo de recomendação de IA.
 2. **O sistema precisa realmente de microsserviços neste momento? Justifique com ASRs.**
-   Não precisa de microsserviços granulares em larga escala, mas sim de uma Arquitetura Orientada a Serviços (SOA/Híbrida). A extração cirúrgica justifica-se estritamente pelos ASRs de **Escalabilidade Independente** (Ranking/IA) e **Tolerância a Falhas** (notificações e IA).
+   Não precisa de microsserviços granulares. O Core fica em **monólito modular** (ASR-01/02). A única fronteira de processo justificada cedo é a **IA em Python** (ASR-05/06) — não o Ranking.
 3. **Qual decisão mudaria se o requisito de escala independente desaparecesse?**
-   A equipa manteria toda a aplicação sob a forma de um **Monólito Modular**. Sem a necessidade de escalar componentes de forma independente, a complexidade de infraestrutura e rede não se justificaria.
+   A equipe manteria o **Monólito Modular** sem sequer extrair a IA; scripts/batch Python bastariam até a tolerância a falhas virar ASR.
 4. **Qual trade-off sua equipe aceitou conscientemente?**
-   O aumento substancial da **complexidade operacional** (múltiplos processos de deploy, gestão de rede e monitorização) em prol de garantir a disponibilidade e estabilidade do fluxo principal do aluno.
+   Aceitar CPU/memória compartilhadas no Core (Ranking ainda no mesmo processo) para **não** multiplicar deploys e rede com uma equipe de 6 pessoas.
 5. **Que evidência futura poderia comprovar que a decisão foi adequada?**
    Métricas de telemetria demonstrando que, durante picos de utilização da IA ou consultas intensas ao ranking, o consumo de recursos (CPU e Memória) do Core permaneceu estável e a taxa de sucesso nas conclusões de curso não sofreu interrupções nem degradação de desempenho.

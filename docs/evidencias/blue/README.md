@@ -98,7 +98,7 @@ No BLUE: cobertura **100%**, sem vermelho ou amarelo.
 ## Cobertura JaCoCo — pacote `domain` (elementos)
 ### página 2 — `org.example.bdd_teste.domain`
 
-Print da página `org.example.bdd_teste.domain`.
+Captura da página `org.example.bdd_teste.domain`.
 
 ![Pagina2_Cobertura_Jacoco.png](Pagina2_Cobertura_Jacoco.png)
 

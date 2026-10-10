@@ -1,0 +1,52 @@
+Started by user admin
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/jenkins_home/workspace/pipeline-ai
+[Pipeline] {
+[Pipeline] timestamps
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Build)
+[Pipeline] echo
+[2026-10-10T17:51:16.118Z] Validando artefato FastAPI / demo Circuit Breaker (componente AI)
+[Pipeline] sh
+[2026-10-10T17:51:16.382Z] + set -e
+[2026-10-10T17:51:16.382Z] + export PYTHONDONTWRITEBYTECODE=1
+[2026-10-10T17:51:16.382Z] + python3 -m py_compile /workspace/labs/lab03-python-circuitbreaker/core_circuit_breaker_demo.py
+[2026-10-10T17:51:16.382Z] + test -f /workspace/labs/lab03-python-circuitbreaker/ai-service/main.py
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Test)
+[Pipeline] echo
+[2026-10-10T17:51:16.421Z] Suíte AI do laboratório (isolada do Core Java)
+[Pipeline] sh
+[2026-10-10T17:51:16.686Z] + set -e
+[2026-10-10T17:51:16.686Z] + export PYTHONDONTWRITEBYTECODE=1
+[2026-10-10T17:51:16.687Z] + python3 -c import ast; ast.parse(open('/workspace/labs/lab03-python-circuitbreaker/core_circuit_breaker_demo.py').read())
+[2026-10-10T17:51:16.687Z] + echo AI suite lab ok
+[2026-10-10T17:51:16.687Z] AI suite lab ok
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Quality Gate)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] echo
+[2026-10-10T17:51:16.769Z] Quality Gate AI OK — promove apenas o artefato FastAPI.
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] echo
+[2026-10-10T17:51:16.810Z] Pipeline AI verde. Core e Gateway não foram acoplados a este job.
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // timestamps
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS

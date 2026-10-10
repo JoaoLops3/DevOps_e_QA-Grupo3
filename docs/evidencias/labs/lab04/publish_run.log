@@ -1,0 +1,4 @@
+Publicados 50 eventos em 2 ms
+Latência média de publicação: 0.0 ms/evento
+Consumer OFF → mensagens acumulam em gamificacao.notificacao (sem perda).
+Management UI: http://localhost:15672  user/pass: gamificacao

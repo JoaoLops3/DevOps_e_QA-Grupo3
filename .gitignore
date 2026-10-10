@@ -1,5 +1,9 @@
 HELP.md
 target/
+.venv/
+**/venv/
+__pycache__/
+*.py[cod]
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/

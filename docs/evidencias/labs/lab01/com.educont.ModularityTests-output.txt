@@ -1,0 +1,1 @@
+13:19:24.307 [main] INFO com.tngtech.archunit.core.PluginLoader -- Detected Java version 21.0.12.1

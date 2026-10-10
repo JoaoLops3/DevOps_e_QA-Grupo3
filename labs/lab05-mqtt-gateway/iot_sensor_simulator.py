@@ -3,6 +3,7 @@ Simulador ESP32 — publica presença no tópico labs/presence com QoS 1.
 Simula oscilação de Wi-Fi: pausa 30s e retoma; o broker entrega o backlog.
 """
 import json
+import os
 import time
 import uuid
 from datetime import datetime, timezone
@@ -13,6 +14,8 @@ BROKER = "localhost"
 PORT = 1883
 TOPIC = "labs/presence"
 CLIENT_ID = f"esp32-lab-{uuid.uuid4().hex[:6]}"
+# Lab completo: 30s. Evidência rápida: OSCILLATION_SECONDS=5
+OSCILLATION_SECONDS = int(os.getenv("OSCILLATION_SECONDS", "30"))
 
 
 def on_connect(client, userdata, flags, reason_code, properties=None):
@@ -49,10 +52,10 @@ def main() -> None:
         publish_presence(client, seq)
         time.sleep(1)
 
-    print("[sensor] >>> OSCILAÇÃO Wi-Fi 30s (desconecta / sem publish) <<<")
+    print(f"[sensor] >>> OSCILAÇÃO Wi-Fi {OSCILLATION_SECONDS}s (desconecta / sem publish) <<<")
     client.loop_stop()
     client.disconnect()
-    time.sleep(30)
+    time.sleep(OSCILLATION_SECONDS)
 
     print("[sensor] Wi-Fi restabelecido — reconecta e drena backlog local + novas leituras")
     client.connect(BROKER, PORT, keepalive=60)

@@ -1,0 +1,1 @@
+{"status":"success","data":{"resultType":"vector","result":[{"metric":{"__name__":"up","component":"lab06-demo","instance":"demo-metrics:8080","job":"lab06-demo-core","service":"core"},"value":[1791651380.831,"1"]}]}}

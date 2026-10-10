@@ -1,0 +1,17 @@
+services:
+  ai-service:
+    image: python:3.12-slim
+    container_name: lab03-ai-service
+    working_dir: /app
+    volumes:
+      - ./ai-service:/app
+    command: >
+      bash -c "pip install --no-cache-dir -q -r requirements.txt &&
+      python main.py"
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+      interval: 5s
+      timeout: 3s
+      retries: 12

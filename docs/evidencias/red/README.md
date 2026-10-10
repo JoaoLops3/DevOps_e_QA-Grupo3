@@ -72,7 +72,7 @@ org.opentest4j.AssertionFailedError: expected: <1> but was: <2>
 | `devePromoverParaPremiumEConcederMoedasAoAtingir12Cursos` | `PREMIUM` | `BASICA` |
 | `naoDeveContabilizarCursoComMediaAbaixoDeSete` | `1` concluído | `2` |
 
-## Print do teste falhando
+## Evidência do teste falhando
 ### Maven / Surefire
 
 **Test:**

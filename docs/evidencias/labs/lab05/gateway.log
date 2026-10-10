@@ -1,0 +1,11 @@
+[gateway] inscrito em labs/presence (QoS 1) → RabbitMQ iot.presence
+[gateway] MQTT→AMQP device=esp32-lab-090697 seq=1
+[gateway] MQTT→AMQP device=esp32-lab-090697 seq=2
+[gateway] MQTT→AMQP device=esp32-lab-090697 seq=3
+[gateway] MQTT→AMQP device=esp32-lab-090697 seq=4
+[gateway] MQTT→AMQP device=esp32-lab-090697 seq=5
+[gateway] MQTT→AMQP device=esp32-lab-090697 seq=6
+[gateway] MQTT→AMQP device=esp32-lab-090697 seq=7
+[gateway] MQTT→AMQP device=esp32-lab-090697 seq=8
+[gateway] MQTT→AMQP device=esp32-lab-090697 seq=9
+[gateway] MQTT→AMQP device=esp32-lab-090697 seq=10

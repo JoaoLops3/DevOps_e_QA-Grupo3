@@ -1,0 +1,27 @@
+/Users/joaogabriellopesaguiar/Documents/DEVOPS/BDD_TESTE/docs/evidencias/labs/lab05/gateway.log:[gateway] inscrito em labs/presence (QoS 1) → RabbitMQ iot.presence
+/Users/joaogabriellopesaguiar/Documents/DEVOPS/BDD_TESTE/docs/evidencias/labs/lab05/gateway.log:[gateway] MQTT→AMQP device=esp32-lab-090697 seq=1
+/Users/joaogabriellopesaguiar/Documents/DEVOPS/BDD_TESTE/docs/evidencias/labs/lab05/gateway.log:[gateway] MQTT→AMQP device=esp32-lab-090697 seq=2
+/Users/joaogabriellopesaguiar/Documents/DEVOPS/BDD_TESTE/docs/evidencias/labs/lab05/gateway.log:[gateway] MQTT→AMQP device=esp32-lab-090697 seq=3
+/Users/joaogabriellopesaguiar/Documents/DEVOPS/BDD_TESTE/docs/evidencias/labs/lab05/gateway.log:[gateway] MQTT→AMQP device=esp32-lab-090697 seq=4
+/Users/joaogabriellopesaguiar/Documents/DEVOPS/BDD_TESTE/docs/evidencias/labs/lab05/gateway.log:[gateway] MQTT→AMQP device=esp32-lab-090697 seq=5
+/Users/joaogabriellopesaguiar/Documents/DEVOPS/BDD_TESTE/docs/evidencias/labs/lab05/gateway.log:[gateway] MQTT→AMQP device=esp32-lab-090697 seq=6
+/Users/joaogabriellopesaguiar/Documents/DEVOPS/BDD_TESTE/docs/evidencias/labs/lab05/gateway.log:[gateway] MQTT→AMQP device=esp32-lab-090697 seq=7
+/Users/joaogabriellopesaguiar/Documents/DEVOPS/BDD_TESTE/docs/evidencias/labs/lab05/gateway.log:[gateway] MQTT→AMQP device=esp32-lab-090697 seq=8
+/Users/joaogabriellopesaguiar/Documents/DEVOPS/BDD_TESTE/docs/evidencias/labs/lab05/gateway.log:[gateway] MQTT→AMQP device=esp32-lab-090697 seq=9
+/Users/joaogabriellopesaguiar/Documents/DEVOPS/BDD_TESTE/docs/evidencias/labs/lab05/gateway.log:[gateway] MQTT→AMQP device=esp32-lab-090697 seq=10
+/Users/joaogabriellopesaguiar/Documents/DEVOPS/BDD_TESTE/docs/evidencias/labs/lab05/sensor_run.log:[sensor] publicando presença (QoS 1)...
+/Users/joaogabriellopesaguiar/Documents/DEVOPS/BDD_TESTE/docs/evidencias/labs/lab05/sensor_run.log:[sensor] conectado rc=Success
+/Users/joaogabriellopesaguiar/Documents/DEVOPS/BDD_TESTE/docs/evidencias/labs/lab05/sensor_run.log:[sensor] seq=1 PUBACK ok
+/Users/joaogabriellopesaguiar/Documents/DEVOPS/BDD_TESTE/docs/evidencias/labs/lab05/sensor_run.log:[sensor] seq=2 PUBACK ok
+/Users/joaogabriellopesaguiar/Documents/DEVOPS/BDD_TESTE/docs/evidencias/labs/lab05/sensor_run.log:[sensor] seq=3 PUBACK ok
+/Users/joaogabriellopesaguiar/Documents/DEVOPS/BDD_TESTE/docs/evidencias/labs/lab05/sensor_run.log:[sensor] seq=4 PUBACK ok
+/Users/joaogabriellopesaguiar/Documents/DEVOPS/BDD_TESTE/docs/evidencias/labs/lab05/sensor_run.log:[sensor] seq=5 PUBACK ok
+/Users/joaogabriellopesaguiar/Documents/DEVOPS/BDD_TESTE/docs/evidencias/labs/lab05/sensor_run.log:[sensor] >>> OSCILAÇÃO Wi-Fi 5s (desconecta / sem publish) <<<
+/Users/joaogabriellopesaguiar/Documents/DEVOPS/BDD_TESTE/docs/evidencias/labs/lab05/sensor_run.log:[sensor] Wi-Fi restabelecido — reconecta e drena backlog local + novas leituras
+/Users/joaogabriellopesaguiar/Documents/DEVOPS/BDD_TESTE/docs/evidencias/labs/lab05/sensor_run.log:[sensor] conectado rc=Success
+/Users/joaogabriellopesaguiar/Documents/DEVOPS/BDD_TESTE/docs/evidencias/labs/lab05/sensor_run.log:[sensor] seq=6 PUBACK ok
+/Users/joaogabriellopesaguiar/Documents/DEVOPS/BDD_TESTE/docs/evidencias/labs/lab05/sensor_run.log:[sensor] seq=7 PUBACK ok
+/Users/joaogabriellopesaguiar/Documents/DEVOPS/BDD_TESTE/docs/evidencias/labs/lab05/sensor_run.log:[sensor] seq=8 PUBACK ok
+/Users/joaogabriellopesaguiar/Documents/DEVOPS/BDD_TESTE/docs/evidencias/labs/lab05/sensor_run.log:[sensor] seq=9 PUBACK ok
+/Users/joaogabriellopesaguiar/Documents/DEVOPS/BDD_TESTE/docs/evidencias/labs/lab05/sensor_run.log:[sensor] seq=10 PUBACK ok
+/Users/joaogabriellopesaguiar/Documents/DEVOPS/BDD_TESTE/docs/evidencias/labs/lab05/sensor_run.log:[sensor] total publicado: 10 (seqs únicos — sem duplicidade de seq)

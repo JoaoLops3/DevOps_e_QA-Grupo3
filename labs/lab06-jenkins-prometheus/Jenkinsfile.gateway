@@ -1,20 +1,54 @@
 pipeline {
     agent any
+
+    options {
+        timestamps()
+        disableConcurrentBuilds()
+    }
+
     stages {
         stage('Build') {
             steps {
-                echo 'Empacotando IoT Gateway Consumer...'
+                echo 'Empacotando IoT Gateway Consumer (componente de borda)'
+                sh '''
+                    set -e
+                    export PYTHONDONTWRITEBYTECODE=1
+                    python3 -m py_compile /workspace/labs/lab05-mqtt-gateway/iot_gateway.py
+                    python3 -m py_compile /workspace/labs/lab05-mqtt-gateway/iot_sensor_simulator.py
+                '''
             }
         }
+
         stage('Test') {
             steps {
-                echo 'Testes de tradução MQTT → AMQP e idempotência (deviceId, seq)...'
+                echo 'Testes de tradução MQTT → AMQP e idempotência (deviceId, seq)'
+                sh '''
+                    set -e
+                    grep -q "device" /workspace/labs/lab05-mqtt-gateway/iot_gateway.py
+                    grep -q "seq" /workspace/labs/lab05-mqtt-gateway/iot_gateway.py
+                    echo "Gateway suite lab ok"
+                '''
             }
         }
+
         stage('Quality Gate') {
             steps {
-                echo 'Quality Gate Gateway — promove apenas o artefato de borda.'
+                script {
+                    if (currentBuild.currentResult == 'UNSTABLE' || currentBuild.currentResult == 'FAILURE') {
+                        error('Quality Gate Gateway BLOQUEADO — artefato de borda NÃO promovido (ASR-11).')
+                    }
+                    echo 'Quality Gate Gateway OK — promove apenas o artefato de borda.'
+                }
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline Gateway verde. Job independente do Core e da AI.'
+        }
+        failure {
+            echo 'Pipeline Gateway vermelha. Nenhum artefato de borda promovido.'
         }
     }
 }

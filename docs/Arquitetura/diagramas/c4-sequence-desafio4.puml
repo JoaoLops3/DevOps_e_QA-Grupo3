@@ -1,22 +1,28 @@
-@startuml
-!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Sequence.puml
+@startuml c4-sequence-desafio4
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
 
-title Diagrama de Sequência (C4) - Fluxo de Conclusão de Curso com RabbitMQ
+' Sequência do Desafio 4 — conclusão síncrona + notificação assíncrona (ADR-004)
+' Usa macros C4 de container + diagrama de sequência PlantUML nativo
+' (C4_Sequence + System_Boundary gera erro de sintaxe em algumas versões)
 
-Person(student, "Aluno", "Finaliza atividade")
-System_Boundary(platform, "Plataforma Gamificada") {
-    Container(core, "Core Spring Boot", "Java", "Processa conclusão")
-    ContainerDb(db, "PostgreSQL", "SQL", "Persiste dados")
-    ContainerQueue(rabbitmq, "RabbitMQ", "AMQP", "Eventos Assíncronos")
-    Container(notification, "Notification Consumer", "Java/Python", "Envia alertas")
-}
+title Sequência — Conclusão de Curso com RabbitMQ (Desafio 4)
 
-Rel(student, core, "1. Conclui Aula (REST)")
-Rel(core, db, "2. Atualiza progresso (Commit Transação)")
-Rel(core, rabbitmq, "3. Publica 'CursoConcluidoEvent' (Fire and Forget)")
-Rel(core, student, "4. Retorna Sucesso (HTTP 200 - Rápido)")
+actor "Aluno" as student
+participant "Core Spring Boot\n(Java)" as core <<Container>>
+database "PostgreSQL" as db <<Container>>
+queue "RabbitMQ" as rabbitmq <<Container>>
+participant "Notification\nConsumer" as notification <<Container>>
 
-Rel(rabbitmq, notification, "5. Consome evento")
-Rel(notification, student, "6. Dispara E-mail / Push Notification")
+student -> core : 1. Conclui curso (REST)
+core -> db : 2. Atualiza progresso (commit)
+core -> rabbitmq : 3. Publica CursoConcluidoEvent
+core --> student : 4. HTTP 200 (rápido, sem esperar notificação)
+rabbitmq -> notification : 5. Consome evento (assíncrono)
+notification --> student : 6. E-mail / push (eventual)
+
+note right of core
+  Caminho síncrono: RF02
+  Efeitos secundários: RF05 via ASR-07/08
+end note
 
 @enduml

@@ -2,7 +2,7 @@
 # Envia 200 requisições concorrentes ao Core para evidenciar throughput e p95 no Grafana.
 set -euo pipefail
 
-BASE_URL="${BASE_URL:-http://localhost:8080}"
+BASE_URL="${BASE_URL:-http://localhost:8088}"
 ENDPOINT="${ENDPOINT:-/api/alunos}"
 TOTAL="${TOTAL:-200}"
 CONCURRENCY="${CONCURRENCY:-20}"

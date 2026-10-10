@@ -4,6 +4,7 @@ Idempotência por (deviceId, seq) evita duplicidade após QoS 1 / reentrega.
 """
 import json
 import sys
+import time
 
 import paho.mqtt.client as mqtt
 import pika
@@ -59,7 +60,7 @@ def on_message(client, userdata, msg):
         "sourceTopic": msg.topic,
     }
     publish_amqp(normalized)
-    print(f"[gateway] MQTT→AMQP device={device_id} seq={seq}")
+    print(f"[gateway] MQTT→AMQP device={device_id} seq={seq}", flush=True)
 
 
 def main() -> None:
@@ -69,9 +70,18 @@ def main() -> None:
         protocol=mqtt.MQTTv311,
     )
     client.on_message = on_message
-    client.connect(MQTT_BROKER, MQTT_PORT, keepalive=60)
+    for attempt in range(1, 16):
+        try:
+            client.connect(MQTT_BROKER, MQTT_PORT, keepalive=60)
+            break
+        except Exception as exc:  # noqa: BLE001
+            print(f"[gateway] aguardando Mosquitto ({attempt}/15): {exc}", flush=True)
+            time.sleep(1)
+    else:
+        raise SystemExit("[gateway] não conectou ao Mosquitto")
+
     client.subscribe(MQTT_TOPIC, qos=1)
-    print(f"[gateway] inscrito em {MQTT_TOPIC} (QoS 1) → RabbitMQ {AMQP_ROUTING_KEY}")
+    print(f"[gateway] inscrito em {MQTT_TOPIC} (QoS 1) → RabbitMQ {AMQP_ROUTING_KEY}", flush=True)
     client.loop_forever()
 
 

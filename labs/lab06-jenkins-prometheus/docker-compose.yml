@@ -1,0 +1,63 @@
+services:
+  demo-metrics:
+    image: python:3.12-slim
+    container_name: lab06-demo-metrics
+    working_dir: /app
+    volumes:
+      - ./demo-metrics:/app
+    command: >
+      bash -c "pip install --no-cache-dir -q -r requirements.txt &&
+      python app.py"
+    ports:
+      # 8080 no host costuma estar com Core — usa 8088 na máquina
+      - "8088:8080"
+
+  prometheus:
+    image: prom/prometheus:v2.54.1
+    container_name: lab06-prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+    depends_on:
+      - demo-metrics
+
+  grafana:
+    image: grafana/grafana:11.2.0
+    container_name: lab06-grafana
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+
+  # ASR-11 — Jenkins com três jobs Pipeline autônomos (Core / AI / Gateway)
+  jenkins:
+    build:
+      context: ./jenkins
+    container_name: lab06-jenkins
+    ports:
+      - "8090:8080"
+      - "50000:50000"
+    environment:
+      CASC_JENKINS_CONFIG: /var/jenkins_home/casc_configs
+      JAVA_OPTS: >-
+        -Djenkins.install.runSetupWizard=false
+        -Dhudson.security.csrf.GlobalCrumbIssuerConfiguration.DISABLE_CSRF_PROTECTION=true
+    volumes:
+      # Raiz do repositório — pipelines compilam labs/lab01, lab03, lab05
+      # (rw: Maven grava target/; Python pode gerar __pycache__)
+      - ../..:/workspace
+      - jenkins_home:/var/jenkins_home
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/login >/dev/null || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 30
+      start_period: 90s
+
+volumes:
+  jenkins_home:

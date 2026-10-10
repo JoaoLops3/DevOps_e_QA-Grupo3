@@ -1,0 +1,5 @@
+attempt=1 state=CLOSED degraded=False elapsed_ms=42.7 last_error=- payload=[{"curso_id": "c-101", "titulo": "TDD na Prática", "score": 0.92}, {"curso_id": "c-202", "titulo": "Arquitetura Hexagonal", "score": 0.88}, {"curso_id": "c-303", "titulo": "Observabilidade com Prometheus", "score": 0.81}]
+attempt=2 state=CLOSED degraded=False elapsed_ms=2.7 last_error=- payload=[{"curso_id": "c-101", "titulo": "TDD na Prática", "score": 0.92}, {"curso_id": "c-202", "titulo": "Arquitetura Hexagonal", "score": 0.88}, {"curso_id": "c-303", "titulo": "Observabilidade com Prometheus", "score": 0.81}]
+attempt=3 state=CLOSED degraded=False elapsed_ms=2.5 last_error=- payload=[{"curso_id": "c-101", "titulo": "TDD na Prática", "score": 0.92}, {"curso_id": "c-202", "titulo": "Arquitetura Hexagonal", "score": 0.88}, {"curso_id": "c-303", "titulo": "Observabilidade com Prometheus", "score": 0.81}]
+
+Evidência gravada em: /Users/joaogabriellopesaguiar/Documents/DEVOPS/BDD_TESTE/docs/evidencias/labs/lab03/circuit_breaker_run.log

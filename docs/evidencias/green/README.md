@@ -49,7 +49,7 @@ Observação: o vermelho do pacote raiz é o `BddTesteApplication` (boot Spring,
 ## Cobertura JaCoCo — pacote `domain` (elementos)
 ### página 2 — `target/site/jacoco/index.html`
 
-Print da página `org.example.bdd_teste.domain`.
+Captura da página `org.example.bdd_teste.domain`.
 
 ![Pagina2-green-domain.png](Pagina2-green-domain.png)
 No GREEN, vermelho do `Aluno` é esperado e aceito.

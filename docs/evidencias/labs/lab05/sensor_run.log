@@ -1,0 +1,16 @@
+[sensor] publicando presença (QoS 1)...
+[sensor] conectado rc=Success
+[sensor] seq=1 PUBACK ok
+[sensor] seq=2 PUBACK ok
+[sensor] seq=3 PUBACK ok
+[sensor] seq=4 PUBACK ok
+[sensor] seq=5 PUBACK ok
+[sensor] >>> OSCILAÇÃO Wi-Fi 5s (desconecta / sem publish) <<<
+[sensor] Wi-Fi restabelecido — reconecta e drena backlog local + novas leituras
+[sensor] conectado rc=Success
+[sensor] seq=6 PUBACK ok
+[sensor] seq=7 PUBACK ok
+[sensor] seq=8 PUBACK ok
+[sensor] seq=9 PUBACK ok
+[sensor] seq=10 PUBACK ok
+[sensor] total publicado: 10 (seqs únicos — sem duplicidade de seq)

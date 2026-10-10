@@ -1,9 +1,12 @@
 package com.educont.ranking.api;
 
+import org.springframework.modulith.NamedInterface;
+
 /**
  * API pública do módulo Ranking.
- * Outros módulos só podem depender deste pacote nomeado.
+ * Pacote ranking.internal permanece inacessível aos demais módulos.
  */
+@NamedInterface("api")
 public interface RankingQuery {
 
     int posicaoDoAluno(String alunoId);

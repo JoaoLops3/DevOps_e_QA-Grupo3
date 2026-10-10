@@ -1,62 +1,81 @@
-# Mini-Lab 06: CI/CD Independente (Jenkins) + Observabilidade (Prometheus/Grafana)
+# Mini-Lab 06: CI/CD Independente (Jenkins) + Observabilidade
 
-## Hipótese Arquitetural Testada
+## Hipótese arquitetural
 
-Pipelines **autônomas** (`Jenkinsfile` / `Jenkinsfile.ai` / `Jenkinsfile.gateway`) com estágios Build → Test → **Quality Gate** bloqueiam promoção em falha (ASR-11). Sob **200** requisições simultâneas, o Prometheus raspa `/actuator/prometheus` e o Grafana registra **throughput** e **latência p95 ≈ 120 ms** (ASR-12, ADR-006).
+Pipelines autônomas (`pipeline-core`, `pipeline-ai`, `pipeline-gateway`) com Quality Gate — **ASR-11**.  
+Prometheus e Grafana observam latência e throughput sob carga — **ASR-12** (ADR-006).
 
-## Requisitos & Componentes
+O serviço `demo-metrics` não substitui o MVP da raiz; serve à prova de scrape e painéis no laboratório.  
+O Jenkins sobe no mesmo compose (porta **8090**) e cria os três jobs a partir dos `Jenkinsfile*`.
 
-| Item | Detalhe |
-| :--- | :--- |
-| CI/CD | `Jenkinsfile` (Core), `Jenkinsfile.ai`, `Jenkinsfile.gateway` |
-| Estágios | Build, Test, Quality Gate (bloqueio) |
-| Scrape | `prometheus.yml` → Core `/actuator/prometheus`, AI `/metrics`, Gateway |
-| Carga | `load-test/simular_carga.sh` — 200 requests concorrentes |
-| Dashboards | Grafana: Throughput, Erros, Latência p95 |
-
-## Como Executar
-
-**Jenkins (por componente)**
-
-1. Criar 3 jobs Multibranch / Pipeline apontando cada Jenkinsfile.
-2. Disparar o job do Core: Build → Test → Quality Gate.
-3. Confirmar que teste vermelho **não** promove o artefato.
-
-**Prometheus + carga**
+## Execução
 
 ```bash
-# Subir Prometheus com este scrape config (exemplo):
-# docker run ... -v $PWD/prometheus.yml:/etc/prometheus/prometheus.yml
-
 cd labs/lab06-jenkins-prometheus
-chmod +x load-test/simular_carga.sh
-./load-test/simular_carga.sh
+docker compose up -d --build
+# Aguardar health do Jenkins (primeiro build baixa plugins)
+./trigger_pipelines.sh
+BASE_URL=http://127.0.0.1:8088 ./load-test/simular_carga.sh
 ```
 
-Consultar no Grafana (datasource Prometheus):
+| Serviço | URL |
+| :--- | :--- |
+| Jenkins | http://localhost:8090 — `admin` / `admin` |
+| Jobs | `/job/pipeline-core`, `/job/pipeline-ai`, `/job/pipeline-gateway` |
+| Demo metrics (carga) | http://localhost:8088/health |
+| Prometheus Targets | http://localhost:9090/targets |
+| Grafana | http://localhost:3000 — `admin` / `admin`; datasource `http://prometheus:9090` |
 
-- `rate(http_server_requests_seconds_count[1m])` — throughput  
-- `histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket[5m])) by (le))` — p95  
+Pasta de artefatos: [`docs/evidencias/labs/lab06/`](../../docs/evidencias/labs/lab06/)
 
-## Evidência e Resultados
+## Critério de aceite
 
-```
---- Jenkins (Core) ---
-[Pipeline] stage Build     ... SUCCESS
-[Pipeline] stage Test      ... SUCCESS (ModularityTests + domain)
-[Pipeline] stage Quality Gate ... SUCCESS — artefato promovido
-# Se Test FAIL → error('Quality Gate BLOQUEADO — artefato NÃO promovido')
+- Três jobs Pipeline no Jenkins com estágios Build → Test → Quality Gate
+- Builds com resultado SUCCESS (Quality Gate não bloqueou)
+- Target Prometheus em estado UP
+- Gráficos Grafana de throughput e/ou latência p95 após a carga
+- Evidência em `docs/evidencias/labs/lab06/`
 
---- Carga ---
-Carga: 200 requests → http://localhost:8080/api/alunos (concurrency=20)
-Concluído.
+## Evidências
 
---- Grafana (simulado) ---
-Throughput:     ~95 req/s (pico da janela de 200 requests)
-Erros 5xx:      0
-Latência p95:   120 ms
-Scrape targets: core:8080/actuator/prometheus  UP
-                ai:8000/metrics                UP
-```
+### ASR-11 — Jenkins (pipelines autônomas + Quality Gate)
 
-**Conclusão:** a hipótese se confirma. Esteira por componente com bloqueio + métricas centralizadas dão evidência operacional para a AF (ADR-006): p95 e throughput visíveis durante o teste de carga.
+Dashboard com os três jobs verdes (`pipeline-ai`, `pipeline-core`, `pipeline-gateway`):
+
+![Jenkins — dashboard dos três jobs](../../docs/evidencias/labs/lab06/jenkins_jobs_dashboard.png)
+
+Build `#1` do `pipeline-core` (SUCCESS):
+
+![Jenkins — pipeline-core SUCCESS](../../docs/evidencias/labs/lab06/jenkins_pipeline_core_ok.png)
+
+Estágios Build → Test → Quality Gate (`pipeline-core`):
+
+![Jenkins — estágios pipeline-core](../../docs/evidencias/labs/lab06/jenkins_pipeline_core_stages.png)
+
+Console com Quality Gate OK:
+
+![Jenkins — console pipeline-core](../../docs/evidencias/labs/lab06/jenkins_pipeline_core_console.png)
+
+Stage View por job:
+
+| Job | Stage View |
+| :--- | :--- |
+| pipeline-core | ![Stage View core](../../docs/evidencias/labs/lab06/pipeline-core_StageView.png) |
+| pipeline-ai | ![Stage View AI](../../docs/evidencias/labs/lab06/pipeline-ai_StageView.png) |
+| pipeline-gateway | ![Stage View gateway](../../docs/evidencias/labs/lab06/pipeline-gateway_StageView.png) |
+
+Logs de console: `pipeline-core_console.log`, `pipeline-ai_console.log`, `pipeline-gateway_console.log`.
+
+### ASR-12 — Prometheus / Grafana
+
+Targets Prometheus UP:
+
+![Prometheus targets](../../docs/evidencias/labs/lab06/prometheus_targets.png)
+
+Queries de throughput / latência p95:
+
+![Queries Prometheus](../../docs/evidencias/labs/lab06/queries_Throughput_latenciaP95.png)
+
+Gráfico Grafana (throughput e latência p95):
+
+![Grafana throughput e p95](../../docs/evidencias/labs/lab06/grafico_queries_Throughput_latenciaP95.png)

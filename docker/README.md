@@ -1,9 +1,9 @@
 # Docker — Educação Continuada Gamificada (3QA)
 
-Stack da **raiz** (MVP): **Spring Boot (API + Vue estático)** + **PostgreSQL** + **pgAdmin**.  
+Stack da raiz (MVP): Spring Boot (API + Vue estático) + PostgreSQL + pgAdmin.  
 Sem H2 e sem Thymeleaf.
 
-Este compose **não** inclui FastAPI, Mosquitto, RabbitMQ nem Prometheus/Grafana. Esses componentes do Architecture Lab B1 ficam isolados em `labs/lab03` … `labs/lab06` — ver [`docs/Arquitetura/README.md`](../docs/Arquitetura/README.md#11-contrato-de-runtime--raiz-do-repositório-vs-mini-labs).
+Este compose não inclui FastAPI, Mosquitto, RabbitMQ nem Prometheus/Grafana. Os componentes do Architecture Lab B1 ficam em `labs/lab03` … `labs/lab06` — ver [`docs/Arquitetura/README.md`](../docs/Arquitetura/README.md#11-contrato-de-runtime--raiz-do-repositório-vs-mini-labs).
 
 ## Credenciais
 
@@ -14,9 +14,9 @@ Este compose **não** inclui FastAPI, Mosquitto, RabbitMQ nem Prometheus/Grafana
 | Postgres | `localhost:5432` / db `progresso_db` | user `progresso` / senha `progresso` |
 | pgAdmin | http://localhost:5050/ | `admin@progresso.com` / `admin` |
 
-No pgAdmin, ao registrar o servidor use host **`postgres`** (nome do serviço na rede Docker), porta `5432`, database `progresso_db`, user/senha `progresso`.
+No pgAdmin, o servidor usa host **`postgres`** (nome do serviço na rede Docker), porta `5432`, database `progresso_db`, user/senha `progresso`.
 
-## Subir tudo
+## Subir a stack
 
 Na raiz do projeto:
 
@@ -24,13 +24,13 @@ Na raiz do projeto:
 docker compose up --build
 ```
 
-Ou em segundo plano:
+Em segundo plano:
 
 ```bash
 docker compose up --build -d
 ```
 
-## Só o banco (app local com Maven)
+## Apenas o banco (aplicação via Maven)
 
 ```bash
 docker compose up -d postgres
@@ -43,8 +43,8 @@ docker compose up -d postgres
 docker compose down
 ```
 
-## Fluxo de teste rápido
+## Validação rápida
 
-1. Acessar http://localhost:8080/ — criar aluno e registrar conclusões.
-2. Confirmar no Swagger os mesmos dados.
-3. No pgAdmin, consultar as tabelas `alunos` e `conclusoes_curso`.
+1. http://localhost:8080/ — criação de aluno e registro de conclusões.
+2. Swagger — mesmos dados via API.
+3. pgAdmin — tabelas `alunos` e `conclusoes_curso`.

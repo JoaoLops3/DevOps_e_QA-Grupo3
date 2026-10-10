@@ -15,7 +15,7 @@ A plataforma de Educação Continuada Gamificada nasce como um MVP de progresso 
 
 ## 1.1 Contrato de runtime — raiz do repositório vs. mini-labs
 
-O C4 Container abaixo descreve a **arquitetura-alvo do B1**. O runtime que sobe na raiz do Git é deliberadamente o **MVP da AC1**, para a banca validar o Core sem acoplar FastAPI, Mosquitto, RabbitMQ ou Prometheus ao `docker compose` principal.
+O C4 Container abaixo descreve a **arquitetura-alvo do B1**. O runtime na raiz do repositório permanece o **MVP da AC1**, sem acoplar FastAPI, Mosquitto, RabbitMQ ou Prometheus ao `docker compose` principal.
 
 | Escopo | O que sobe / onde está | Objetivo |
 | :--- | :--- | :--- |
@@ -41,8 +41,11 @@ Componentes do C4 que **não** entram no compose da raiz — e onde são validad
 | AI Service (FastAPI) + Circuit Breaker | [labs/lab03-python-circuitbreaker](../../labs/lab03-python-circuitbreaker/) |
 | RabbitMQ + DLQ | [labs/lab04-rabbitmq-resilience](../../labs/lab04-rabbitmq-resilience/) |
 | Mosquitto + IoT Gateway | [labs/lab05-mqtt-gateway](../../labs/lab05-mqtt-gateway/) |
-| Jenkins / Prometheus / Grafana | [labs/lab06-jenkins-prometheus](../../labs/lab06-jenkins-prometheus/) |
+| Jenkins (jobs vivos) / Prometheus / Grafana | [labs/lab06-jenkins-prometheus](../../labs/lab06-jenkins-prometheus/) |
 | Fronteiras Modulith / domínio hexagonal | [labs/lab01](../../labs/lab01-spring-modulith/), [labs/lab02](../../labs/lab02-domain-isolation/) |
+
+**Artefatos de execução:** [`docs/evidencias/labs/`](../evidencias/labs/).  
+A reprodução de cada hipótese está descrita no `README.md` do respectivo mini-lab em `labs/`.
 
 ## 2. Matriz Cumulativa de ASRs (Requisitos Arquiteturalmente Significativos)
 
@@ -71,6 +74,9 @@ Componentes do C4 que **não** entram no compose da raiz — e onde são validad
 6. [ADR-006: Esteira CI/CD Independente no Jenkins e Monitoramento com Prometheus/Grafana](./adr/ADR-006-cicd-observabilidade.md)
 
 ## 4. C4 Architecture Overview (Nível Container)
+
+Diagramas fonte (`.puml`) e PNGs gerados na mesma pasta: [`diagramas/`](./diagramas/).  
+Cópia para evidências: [`docs/evidencias/labs/c4/`](../evidencias/labs/c4/).
 
 ```puml
 @startuml c4-container-overview

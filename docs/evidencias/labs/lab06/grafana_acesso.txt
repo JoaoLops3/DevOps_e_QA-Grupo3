@@ -1,0 +1,4 @@
+Grafana: http://localhost:3000  (admin / admin)
+Prometheus: http://localhost:9090
+Datasource Grafana: URL http://prometheus:9090 (rede Docker) ou http://host.docker.internal:9090
+Painéis sugeridos: Throughput, Erros, Latência p95
