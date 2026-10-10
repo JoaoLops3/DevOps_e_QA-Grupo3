@@ -1,0 +1,70 @@
+@startuml c4-deployment
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Deployment.puml
+
+LAYOUT_WITH_LEGEND()
+
+title Plataforma de Gamificação — Topologia de Implantação (Desafio 6)\nC4 Nível Deployment — CI/CD, Produção e Observabilidade
+
+Deployment_Node(cicd, "Nó CI/CD", "Jenkins Server") {
+    Container(jenkins, "Jenkins", "Automation Server", "Orquestra builds e promoções com bloqueio em falha de teste.")
+    Container(jf_core, "Jenkinsfile.core", "Pipeline", "Build, teste e promoção do Core Java.")
+    Container(jf_ai, "Jenkinsfile.ai", "Pipeline", "Build, teste e promoção do AI Service.")
+    Container(jf_gateway, "Jenkinsfile.gateway", "Pipeline", "Build, teste e promoção do IoT Gateway.")
+}
+
+Deployment_Node(prod, "Nó de Produção", "Docker Host") {
+
+    Deployment_Node(core_node, "Pod / Container", "Core Java") {
+        Container(core, "Core Application", "Java, Spring Boot", "Monólito modular. Expõe /actuator/prometheus.")
+    }
+
+    Deployment_Node(ai_node, "Pod / Container", "AI Service") {
+        Container(ai, "AI Service", "Python, FastAPI", "Recomendação e RAG. Expõe /metrics.")
+    }
+
+    Deployment_Node(gw_node, "Pod / Container", "IoT Gateway") {
+        Container(gateway, "IoT Gateway Consumer", "Adaptador de borda", "Traduz MQTT → AMQP.")
+    }
+
+    Deployment_Node(rabbit_node, "Pod / Container", "Message Broker") {
+        ContainerQueue(rabbit, "RabbitMQ", "AMQP", "Eventos da plataforma e DLQ.")
+    }
+
+    Deployment_Node(mqtt_node, "Pod / Container", "MQTT Broker") {
+        ContainerQueue(mosquitto, "Eclipse Mosquitto", "MQTT", "Ingestão IoT dos laboratórios.")
+    }
+
+    Deployment_Node(db_node, "Pod / Container", "Database") {
+        ContainerDb(postgres, "PostgreSQL", "Banco relacional", "Estado transacional do Core.")
+    }
+}
+
+Deployment_Node(monitoring, "Nó de Monitoramento", "Observabilidade") {
+
+    Deployment_Node(prom_node, "Pod / Container", "Prometheus") {
+        Container(prometheus, "Prometheus Server", "Time-series DB", "Scrape periódico de /actuator/prometheus e /metrics.")
+    }
+
+    Deployment_Node(graf_node, "Pod / Container", "Grafana") {
+        Container(grafana, "Grafana Server", "Dashboards", "Throughput, erros e latência p95 a partir do Prometheus.")
+    }
+}
+
+Rel(jenkins, jf_core, "Executa")
+Rel(jenkins, jf_ai, "Executa")
+Rel(jenkins, jf_gateway, "Executa")
+Rel(jf_core, core, "Constrói e promove artefato", "Deploy")
+Rel(jf_ai, ai, "Constrói e promove artefato", "Deploy")
+Rel(jf_gateway, gateway, "Constrói e promove artefato", "Deploy")
+
+Rel(core, postgres, "JDBC")
+Rel(core, ai, "HTTP/REST")
+Rel(core, rabbit, "AMQP")
+Rel(mosquitto, gateway, "MQTT")
+Rel(gateway, rabbit, "AMQP")
+
+Rel(prometheus, core, "Scrape Metrics", "GET /actuator/prometheus")
+Rel(prometheus, ai, "Scrape Metrics", "GET /metrics")
+Rel(grafana, prometheus, "Consulta séries", "PromQL")
+
+@enduml

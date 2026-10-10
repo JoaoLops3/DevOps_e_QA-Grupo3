@@ -1,0 +1,28 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: "core-spring-boot"
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ["core:8080"]
+        labels:
+          service: "core"
+          component: "gamificacao"
+
+  - job_name: "ai-fastapi"
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["ai:8000"]
+        labels:
+          service: "ai"
+          component: "recomendacao"
+
+  - job_name: "iot-gateway"
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ["gateway:8081"]
+        labels:
+          service: "iot-gateway"
+          component: "borda"

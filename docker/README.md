@@ -1,7 +1,9 @@
 # Docker — Educação Continuada Gamificada (3QA)
 
-Stack: **Spring Boot (API + Vue estático)** + **PostgreSQL** + **pgAdmin**.  
+Stack da **raiz** (MVP): **Spring Boot (API + Vue estático)** + **PostgreSQL** + **pgAdmin**.  
 Sem H2 e sem Thymeleaf.
+
+Este compose **não** inclui FastAPI, Mosquitto, RabbitMQ nem Prometheus/Grafana. Esses componentes do Architecture Lab B1 ficam isolados em `labs/lab03` … `labs/lab06` — ver [`docs/Arquitetura/README.md`](../docs/Arquitetura/README.md#11-contrato-de-runtime--raiz-do-repositório-vs-mini-labs).
 
 ## Credenciais
 

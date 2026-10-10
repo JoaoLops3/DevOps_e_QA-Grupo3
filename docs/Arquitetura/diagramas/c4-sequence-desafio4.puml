@@ -1,0 +1,22 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Sequence.puml
+
+title Diagrama de Sequência (C4) - Fluxo de Conclusão de Curso com RabbitMQ
+
+Person(student, "Aluno", "Finaliza atividade")
+System_Boundary(platform, "Plataforma Gamificada") {
+    Container(core, "Core Spring Boot", "Java", "Processa conclusão")
+    ContainerDb(db, "PostgreSQL", "SQL", "Persiste dados")
+    ContainerQueue(rabbitmq, "RabbitMQ", "AMQP", "Eventos Assíncronos")
+    Container(notification, "Notification Consumer", "Java/Python", "Envia alertas")
+}
+
+Rel(student, core, "1. Conclui Aula (REST)")
+Rel(core, db, "2. Atualiza progresso (Commit Transação)")
+Rel(core, rabbitmq, "3. Publica 'CursoConcluidoEvent' (Fire and Forget)")
+Rel(core, student, "4. Retorna Sucesso (HTTP 200 - Rápido)")
+
+Rel(rabbitmq, notification, "5. Consome evento")
+Rel(notification, student, "6. Dispara E-mail / Push Notification")
+
+@enduml

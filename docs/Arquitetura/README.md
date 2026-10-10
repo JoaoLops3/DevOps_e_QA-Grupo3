@@ -13,6 +13,37 @@ A plataforma de Educação Continuada Gamificada nasce como um MVP de progresso 
 - **Contexto da AC1:** o MVP é um monólito em Java/Spring Boot com banco relacional. Atende cerca de 1.000 usuários nos fluxos de ranking, cursos, moedas, badges e recompensas. Uma base de código, um processo e um schema bastam para a equipa de seis pessoas entregar e operar o produto.
 - **Evolução para o B1:** a meta sobe para 100.000 usuários e para múltiplas instituições. Entram um motor de recomendação e um assistente educacional com RAG/LLM em Python, mensageria assíncrona para efeitos secundários da conclusão de curso, ingestão de eventos IoT de laboratórios via MQTT, pipeline de CI/CD no Jenkins e observabilidade com Prometheus e Grafana. A escala e o isolamento de falha passam a ditar a fronteira de cada componente; a decomposição em microsserviços granulares continua fora de escopo.
 
+## 1.1 Contrato de runtime — raiz do repositório vs. mini-labs
+
+O C4 Container abaixo descreve a **arquitetura-alvo do B1**. O runtime que sobe na raiz do Git é deliberadamente o **MVP da AC1**, para a banca validar o Core sem acoplar FastAPI, Mosquitto, RabbitMQ ou Prometheus ao `docker compose` principal.
+
+| Escopo | O que sobe / onde está | Objetivo |
+| :--- | :--- | :--- |
+| **Raiz do repositório** | `src/`, `frontend/`, `docker-compose.yml`, `Dockerfile` | MVP rodável: Core Spring Boot + PostgreSQL + pgAdmin |
+| **Mini-labs B1** | `labs/lab01` … `labs/lab06` (cada um isolado) | Evidência de hipótese por desafio (Modulith, hexagonal, IA+CB, RabbitMQ, MQTT, Jenkins/Prometheus) |
+| **Registro arquitetural** | Este README + `adr/` + `diagramas/` | Decisões, ASRs, C4 e rastreabilidade |
+
+```bash
+# Na raiz — sobe só o MVP (Core + Postgres + pgAdmin)
+docker compose up --build
+```
+
+| Serviço (raiz) | URL / acesso |
+| :--- | :--- |
+| Core (API + Vue) | http://localhost:8080/ |
+| PostgreSQL | `localhost:5432` · db `progresso_db` · user/senha `progresso` |
+| pgAdmin | http://localhost:5050/ · `admin@progresso.com` / `admin` |
+
+Componentes do C4 que **não** entram no compose da raiz — e onde são validados:
+
+| Componente (C4) | Validação |
+| :--- | :--- |
+| AI Service (FastAPI) + Circuit Breaker | [labs/lab03-python-circuitbreaker](../../labs/lab03-python-circuitbreaker/) |
+| RabbitMQ + DLQ | [labs/lab04-rabbitmq-resilience](../../labs/lab04-rabbitmq-resilience/) |
+| Mosquitto + IoT Gateway | [labs/lab05-mqtt-gateway](../../labs/lab05-mqtt-gateway/) |
+| Jenkins / Prometheus / Grafana | [labs/lab06-jenkins-prometheus](../../labs/lab06-jenkins-prometheus/) |
+| Fronteiras Modulith / domínio hexagonal | [labs/lab01](../../labs/lab01-spring-modulith/), [labs/lab02](../../labs/lab02-domain-isolation/) |
+
 ## 2. Matriz Cumulativa de ASRs (Requisitos Arquiteturalmente Significativos)
 
 | ID | Desafio | ASR | Atributo (FURPS+) | Impacto na Arquitetura |
@@ -94,9 +125,27 @@ A prova de conceito da AF demonstra a cadeia que os ASRs exigem, do domínio iso
 - **RabbitMQ & IoT Integration:** fluxo completo de ingestão MQTT → IoT Gateway → RabbitMQ → processamento do Core.
 - **Observabilidade:** coleta de métricas em tempo real no Prometheus com exibição de latência p95 e throughput no Grafana durante testes de carga.
 
-## 6. Rastreabilidade por Desafio (RF → Evidência)
+## 6. Rastreabilidade Reversa (Regra de Ouro)
 
-Abaixo está a trilha arquitetural exigida, comprovando que cada decisão resolve um problema real da plataforma.
+Uma decisão forte se lê **de trás para frente**: o desenho C4 é explicado pelo ADR; o ADR é sustentado pelos ASRs e RPCs; os ASRs derivam de RF/RNF; a evidência (mini-lab) mostra que o raciocínio é plausível.
+
+### Fluxo crítico — conclusão de curso e notificação (Desafio 4)
+
+Leitura reversa do caminho que aparece no C4 Container (Core ↔ RabbitMQ) e na sequência de eventos:
+
+| Passo (de trás → frente) | Artefato | O que responde |
+| :--- | :--- | :--- |
+| **1. Desenho** | [C4 Container](./diagramas/c4-container-overview.puml) + [C4 Sequence](./diagramas/c4-sequence-desafio4.puml) | Core publica `CursoConcluidoEvent`; notificação/analytics consomem via RabbitMQ (fora do request do aluno). |
+| **2. Decisão** | [ADR-004](./adr/ADR-004-mensageria-assincrona.md) | Por que RabbitMQ (e não REST síncrono nem Kafka): desacopla efeitos secundários, DLQ, footprint operável pela equipe. |
+| **3. Drivers** | **ASR-07** (latência &lt; 200 ms no caminho síncrono) e **ASR-08** (entrega + reprocessamento / DLQ), respeitando **RPC-06** (falha de notificação não impede conclusão) e **RPC-07** (broker simples). | O que realmente obriga mudar comunicação e dados em trânsito. |
+| **4. Qualidade e necessidade** | **RNF:** tolerância a falhas, latência, desacoplamento temporal, recuperabilidade — derivados do **RF05** (notificações) e do **RF02** (conclusão/recompensa no caminho crítico). | Por que o problema existe no produto. |
+| **5. Evidência** | [Lab 04 — RabbitMQ](../../labs/lab04-rabbitmq-resilience/) | Consumer indisponível: 50 eventos acumulam na fila; Core responde ~42 ms; backlog drenado sem perda. |
+
+Em uma linha: **C4 (RabbitMQ) ← ADR-004 ← ASR-07/08 (+ RPC-06/07) ← RNF de tolerância a falhas/latência ← RF05/RF02 ← Lab 04**.
+
+## 7. Rastreabilidade por Desafio (RF → Evidência)
+
+Abaixo está a trilha arquitetural **para frente** (RF → evidência), complementar à leitura reversa da seção 6.
 
 ### Desafio 1 — Drivers e Evolução do Core
 

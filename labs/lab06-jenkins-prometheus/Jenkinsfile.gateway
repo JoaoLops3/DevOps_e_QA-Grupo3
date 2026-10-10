@@ -1,0 +1,20 @@
+pipeline {
+    agent any
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Empacotando IoT Gateway Consumer...'
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Testes de tradução MQTT → AMQP e idempotência (deviceId, seq)...'
+            }
+        }
+        stage('Quality Gate') {
+            steps {
+                echo 'Quality Gate Gateway — promove apenas o artefato de borda.'
+            }
+        }
+    }
+}

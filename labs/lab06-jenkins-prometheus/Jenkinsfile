@@ -1,0 +1,51 @@
+pipeline {
+    agent any
+
+    options {
+        timestamps()
+        disableConcurrentBuilds()
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Compilando Core Java (Spring Boot / Modulith)...'
+                sh './mvnw -B -DskipTests package'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Executando suíte unitária + ModularityTests...'
+                sh './mvnw -B test'
+            }
+            post {
+                always {
+                    junit allowEmptyResults: true, testResults: '**/target/surefire-reports/*.xml'
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                echo 'Quality Gate: falha de teste ou cobertura bloqueia a promoção.'
+                script {
+                    def failed = currentBuild.currentResult == 'UNSTABLE' || currentBuild.currentResult == 'FAILURE'
+                    if (failed) {
+                        error('Quality Gate BLOQUEADO — artefato NÃO promovido (ASR-11).')
+                    }
+                    echo 'Quality Gate OK — promovendo artefato do Core.'
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline Core verde. Deploy autorizado apenas para este componente.'
+        }
+        failure {
+            echo 'Pipeline Core vermelho. Nenhum artefato promovido.'
+        }
+    }
+}

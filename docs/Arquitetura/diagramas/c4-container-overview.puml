@@ -1,0 +1,54 @@
+@startuml c4-container-overview
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+
+title Plataforma de Gamificação — Educação Continuada (B1)\nC4 Nível Container — Visão Consolidada
+
+Person(aluno, "Aluno", "Acessa a plataforma via Web ou Mobile para cursos, progresso, ranking e recompensas.")
+Person_Ext(dispositivo_iot, "Dispositivo IoT", "ESP32 / Arduino em laboratório. Publica presença e atividade.")
+
+System_Boundary(plataforma, "Plataforma de Gamificação para Educação Continuada") {
+
+    Container(frontend, "Web / Mobile App", "React / Mobile", "Interface do aluno. Consome a API do Core.")
+
+    Container(core, "Core Application", "Java, Spring Boot, Spring Modulith", "Monólito modular com Ports & Adapters. Cursos, progresso, ranking, moedas, badges e publicação de eventos.")
+
+    ContainerDb(postgres, "PostgreSQL", "Banco relacional", "Estado transacional de alunos, cursos, moedas, badges e recompensas.")
+
+    Container(ai, "AI Service", "Python, FastAPI", "Recomendação inteligente e assistente educacional com RAG/LLM.")
+
+    ContainerDb(vectordb, "ChromaDB / PGVector", "Base vetorial", "Embeddings e índice do assistente RAG.")
+
+    ContainerQueue(rabbit, "RabbitMQ", "AMQP", "Broker de eventos da plataforma. Filas de gamificação, notificação, analytics e DLQ.")
+
+    ContainerQueue(mosquitto, "Eclipse Mosquitto", "MQTT", "Broker MQTT para ingestão de telemetria dos laboratórios.")
+
+    Container(iot_gateway, "IoT Gateway Consumer", "Java / Adaptador de borda", "Traduz eventos IoT (MQTT) para eventos de domínio no RabbitMQ. Isola o Core da rede IoT.")
+}
+
+System_Boundary(operacao, "Operação e Observabilidade") {
+
+    Container(jenkins, "Jenkins Server", "CI/CD", "Pipelines multibranch independentes por componente (Core, AI, Gateway).")
+
+    Container(observabilidade, "Prometheus & Grafana", "Métricas e dashboards", "Scrape de métricas e visualização de throughput, erros e latência p95.")
+}
+
+Rel(aluno, frontend, "Usa", "HTTPS")
+Rel(frontend, core, "Chama API de progresso, ranking e recompensas", "HTTP/REST")
+Rel(core, postgres, "Lê e escreve estado de negócio", "JDBC")
+Rel(core, ai, "Solicita recomendação e RAG (com Circuit Breaker)", "HTTP/REST")
+Rel(ai, vectordb, "Consulta e persiste embeddings", "HTTP / SQL")
+Rel(core, rabbit, "Publica e consome eventos (ex.: CursoConcluidoEvent)", "AMQP")
+Rel(dispositivo_iot, mosquitto, "Publica presença e atividade", "MQTT QoS 1")
+Rel(mosquitto, iot_gateway, "Entrega telemetria dos laboratórios", "MQTT")
+Rel(iot_gateway, rabbit, "Publica evento normalizado de laboratório", "AMQP")
+Rel(rabbit, core, "Entrega eventos para processamento de domínio", "AMQP")
+Rel(jenkins, core, "Build, teste e promoção", "Pipeline")
+Rel(jenkins, ai, "Build, teste e promoção", "Pipeline")
+Rel(jenkins, iot_gateway, "Build, teste e promoção", "Pipeline")
+Rel(observabilidade, core, "Coleta métricas", "Scrape /actuator/prometheus")
+Rel(observabilidade, ai, "Coleta métricas", "Scrape /metrics")
+Rel(observabilidade, iot_gateway, "Coleta métricas", "Scrape Metrics")
+
+@enduml

@@ -2,7 +2,20 @@
 
 Spring Boot + TDD/ATDD (Red → Green → Blue) da US de progresso da assinatura básica rumo ao Premium.
 
-**Stack:** API REST + **Vue 3 (CDN)** estático + **PostgreSQL** (sem H2, sem Thymeleaf).
+**Stack (raiz):** API REST + **Vue 3 (CDN)** estático + **PostgreSQL** (sem H2, sem Thymeleaf).
+
+**Architecture Lab B1:** decisões, ADRs e C4 em [`docs/Arquitetura/`](docs/Arquitetura/README.md); evidências por desafio em [`labs/lab01` … `labs/lab06`](labs/).
+
+---
+
+## Raiz vs. mini-labs (o que a banca sobe)
+
+| Escopo | Conteúdo | Comando |
+| :--- | :--- | :--- |
+| **Raiz (MVP)** | `src/`, `frontend/`, `docker-compose.yml` → Core + PostgreSQL + pgAdmin | `docker compose up --build` |
+| **Labs B1** | `labs/lab01` … `labs/lab06` isolados (FastAPI, RabbitMQ, Mosquitto, Prometheus/Grafana, etc.) | ver o `README.md` de cada lab |
+
+O `docker compose up` na raiz **não** sobe AI Service, Mosquitto, RabbitMQ nem Prometheus/Grafana. Esses componentes aparecem no C4 do B1 e são validados nos mini-labs — ver [contrato de runtime](docs/Arquitetura/README.md#11-contrato-de-runtime--raiz-do-repositório-vs-mini-labs).
 
 ---
 
@@ -145,17 +158,20 @@ Endpoints principais:
 ## Estrutura do projeto
 
 ```
-src/main/java/org/example/bdd_teste/
-├── BddTesteApplication.java
-├── domain/           # regras TDD (100% JaCoCo)
-├── entity/ dto/ repository/ service/ controller/
-├── config/           # OpenAPI + CORS
-└── exception/        # 404/400 limpos
-
-frontend/                    # Vue (fonte da verdade)
-src/main/resources/static/   # espelho gerado pelo Maven a partir de frontend/
-docs/evidencias/             # RED / GREEN / BLUE / us-bdd / banco
-docker-compose.yml + Dockerfile
+├── src/                         # Core Spring Boot (MVP)
+├── frontend/                    # Vue (fonte da verdade; Maven copia para static/)
+├── docker-compose.yml           # MVP: app + Postgres + pgAdmin
+├── Dockerfile
+├── docs/
+│   ├── Arquitetura/             # B1: README vivo, ADRs, C4
+│   └── evidencias/              # AC1: RED / GREEN / BLUE / us-bdd / banco
+└── labs/
+    ├── lab01-spring-modulith/   # D1 — fronteiras Modulith
+    ├── lab02-domain-isolation/  # D2 — domínio hexagonal
+    ├── lab03-python-circuitbreaker/  # D3 — FastAPI + Circuit Breaker
+    ├── lab04-rabbitmq-resilience/    # D4 — RabbitMQ + DLQ
+    ├── lab05-mqtt-gateway/           # D5 — Mosquitto + IoT Gateway
+    └── lab06-jenkins-prometheus/     # D6 — CI/CD + observabilidade
 ```
 
 Editar a SPA em `frontend/`. O Maven sincroniza para `static/` em todo build (`generate-resources`).
