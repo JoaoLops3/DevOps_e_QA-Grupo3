@@ -8,9 +8,9 @@
 
 ## 1. Visão Geral
 
-A plataforma de Educação Continuada Gamificada nasce como um MVP de progresso de assinatura (cursos concluídos, moedas e promoção para Premium) e, no Architecture Lab B1, passa a sustentar escala, inteligência e operação contínua. O registo abaixo acumula as decisões dos seis desafios: o que permanece no Core, o que sai para um serviço próprio e o que fica na borda de integração.
+A plataforma de Educação Continuada Gamificada nasce como um MVP de progresso de assinatura (cursos concluídos, moedas e promoção para Premium) e, no Architecture Lab B1, passa a sustentar escala, inteligência e operação contínua. O registro abaixo acumula as decisões dos seis desafios: o que permanece no Core, o que sai para um serviço próprio e o que fica na borda de integração.
 
-- **Contexto da AC1:** o MVP é um monólito em Java/Spring Boot com banco relacional. Atende cerca de 1.000 usuários nos fluxos de ranking, cursos, moedas, badges e recompensas. Uma base de código, um processo e um schema bastam para a equipa de seis pessoas entregar e operar o produto.
+- **Contexto da AC1:** o MVP é um monólito em Java/Spring Boot com banco relacional. Atende cerca de 1.000 usuários nos fluxos de ranking, cursos, moedas, badges e recompensas. Uma base de código, um processo e um schema bastam para a equipe de seis pessoas entregar e operar o produto.
 - **Evolução para o B1:** a meta sobe para 100.000 usuários e para múltiplas instituições. Entram um motor de recomendação e um assistente educacional com RAG/LLM em Python, mensageria assíncrona para efeitos secundários da conclusão de curso, ingestão de eventos IoT de laboratórios via MQTT, pipeline de CI/CD no Jenkins e observabilidade com Prometheus e Grafana. A escala e o isolamento de falha passam a ditar a fronteira de cada componente; a decomposição em microsserviços granulares continua fora de escopo.
 
 ## 1.1 Contrato de runtime — raiz do repositório vs. mini-labs
@@ -56,7 +56,7 @@ A reprodução de cada hipótese está descrita no `README.md` do respectivo min
 | **ASR-03** | D2 — Organização Interna | Isolamento das regras de gamificação contra mudanças tecnológicas | Supportability / Testability | Aplica Arquitetura Hexagonal (Ports & Adapters) no domínio do Core. |
 | **ASR-04** | D2 — Organização Interna | Testabilidade da lógica de negócio sem dependência de BD/Spring | Testability | Desacopla o Domain Core de frameworks externos (JPA/Spring). |
 | **ASR-05** | D3 — Serviço Python & IA | Isolamento de tecnologia e ciclo de vida do motor de IA em Python | Interoperability / Deploy | Cria um serviço independente em FastAPI para recomendação e RAG. |
-| **ASR-06** | D3 — Serviço Python & IA | Degradation graciosa: falhas na IA não bloqueiam cursos/pontos | Reliability / Fault Tolerance | Implementa Circuit Breaker (Resilience4j) e Fallbacks no Core Java. |
+| **ASR-06** | D3 — Serviço Python & IA | Degradação graciosa: falhas na IA não bloqueiam cursos/pontos | Reliability / Fault Tolerance | Implementa Circuit Breaker (Resilience4j) e Fallbacks no Core Java. |
 | **ASR-07** | D4 — Comunicação & Eventos | Processamento assíncrono para tarefas secundárias pós-conclusão | Performance / Latency | Usa eventos para notificações, badges e analytics sem bloquear o aluno. |
 | **ASR-08** | D4 — Comunicação & Eventos | Garantia de entrega e reprocessamento em caso de falha | Reliability / Recoverability | Introduz broker RabbitMQ com filas e suporte a Dead Letter Queues (DLQ). |
 | **ASR-09** | D5 — IoT & MQTT | Comunicação leve e eficiente para microcontroladores restritos | Efficiency / Network | Adota protocolo MQTT (Eclipse Mosquitto) em vez de REST HTTP. |
@@ -145,7 +145,7 @@ Leitura reversa do caminho que aparece no C4 Container (Core ↔ RabbitMQ) e na 
 | **2. Decisão** | [ADR-004](./adr/ADR-004-mensageria-assincrona.md) | Por que RabbitMQ (e não REST síncrono nem Kafka): desacopla efeitos secundários, DLQ, footprint operável pela equipe. |
 | **3. Drivers** | **ASR-07** (latência &lt; 200 ms no caminho síncrono) e **ASR-08** (entrega + reprocessamento / DLQ), respeitando **RPC-06** (falha de notificação não impede conclusão) e **RPC-07** (broker simples). | O que realmente obriga mudar comunicação e dados em trânsito. |
 | **4. Qualidade e necessidade** | **RNF:** tolerância a falhas, latência, desacoplamento temporal, recuperabilidade — derivados do **RF05** (notificações) e do **RF02** (conclusão/recompensa no caminho crítico). | Por que o problema existe no produto. |
-| **5. Evidência** | [Lab 04 — RabbitMQ](../../labs/lab04-rabbitmq-resilience/) | Consumer indisponível: 50 eventos acumulam na fila; Core responde ~42 ms; backlog drenado sem perda. |
+| **5. Evidência** | [Lab 04 — RabbitMQ](../../labs/lab04-rabbitmq-resilience/) | Consumer indisponível: publisher envia 50/execução; fila ≥ 50 (evidência: ready=150 após reexecuções); sem perda. |
 
 Em uma linha: **C4 (RabbitMQ) ← ADR-004 ← ASR-07/08 (+ RPC-06/07) ← RNF de tolerância a falhas/latência ← RF05/RF02 ← Lab 04**.
 

@@ -25,3 +25,13 @@ Evidência: `docs/evidencias/labs/lab05/`
 - Log `[gateway] MQTT→AMQP` para seq 1..10
 - Core sem assinatura MQTT (RPC-09)
 - Evidência em `docs/evidencias/labs/lab05/`
+
+## Evidências
+
+Pasta: [`docs/evidencias/labs/lab05/`](../../docs/evidencias/labs/lab05/) · Galeria B1: [`docs/evidencias/labs/README.md`](../../docs/evidencias/labs/README.md)
+
+Fluxo MQTT → IoT Gateway → AMQP:
+
+![MQTT Gateway — fluxo](../../docs/evidencias/labs/lab05/mqtt_gateway_fluxo.png)
+
+Logs: `gateway.log`, `sensor_run.log`, `fluxo_resumo.log`.

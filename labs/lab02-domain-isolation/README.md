@@ -26,3 +26,13 @@ Evidência: `docs/evidencias/labs/lab02/`
 - `Tests run: 3, Failures: 0`
 - `pom.xml` sem dependência `spring-boot` (domínio puro)
 - Evidência em `docs/evidencias/labs/lab02/`
+
+## Evidências
+
+Pasta: [`docs/evidencias/labs/lab02/`](../../docs/evidencias/labs/lab02/) · Galeria B1: [`docs/evidencias/labs/README.md`](../../docs/evidencias/labs/README.md)
+
+Testes de domínio (Java puro) OK:
+
+![Domínio — testes OK](../../docs/evidencias/labs/lab02/domain_tests_ok.png)
+
+Logs: `domain_tests.log`, `com.educont.gamification.domain.RewardCalculatorTest.txt`, `resumo.txt`.

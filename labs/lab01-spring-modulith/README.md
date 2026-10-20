@@ -32,3 +32,13 @@ lab01-spring-modulith/
 - `BUILD SUCCESS`
 - Surefire com `verificaFronteirasEntreModulos` OK
 - Evidência em `docs/evidencias/labs/lab01/`
+
+## Evidências
+
+Pasta: [`docs/evidencias/labs/lab01/`](../../docs/evidencias/labs/lab01/) · Galeria B1: [`docs/evidencias/labs/README.md`](../../docs/evidencias/labs/README.md)
+
+`ApplicationModules.verify()` OK (Surefire / Modulith):
+
+![Modulith — fronteiras OK](../../docs/evidencias/labs/lab01/modulith_verify_ok.png)
+
+Logs: `modularity_tests.log`, `com.educont.ModularityTests.txt`, `com.educont.ModularityTests-output.txt`.

@@ -27,3 +27,15 @@ Referência Java: `core/AiRecommendationClient.java` e `core/application.yml`.
 
 - Log com `state=OPEN` e `degraded=true` no caminho degradado
 - Evidência em `docs/evidencias/labs/lab03/`
+
+## Evidências
+
+Pasta: [`docs/evidencias/labs/lab03/`](../../docs/evidencias/labs/lab03/) · Galeria B1: [`docs/evidencias/labs/README.md`](../../docs/evidencias/labs/README.md)
+
+Circuit Breaker CLOSED (IA disponível) e OPEN (degradação graciosa):
+
+![Circuit Breaker CLOSED](../../docs/evidencias/labs/lab03/circuit_close_fallback.png)
+
+![Circuit Breaker OPEN](../../docs/evidencias/labs/lab03/circuit_open_fallback.png)
+
+Logs: `circuit_breaker_run.log`, `run_ai_up.log`, `run_ai_down.log`.

@@ -5,7 +5,9 @@ Sem H2 e sem Thymeleaf.
 
 Este compose não inclui FastAPI, Mosquitto, RabbitMQ nem Prometheus/Grafana. Os componentes do Architecture Lab B1 ficam em `labs/lab03` … `labs/lab06` — ver [`docs/Arquitetura/README.md`](../docs/Arquitetura/README.md#11-contrato-de-runtime--raiz-do-repositório-vs-mini-labs).
 
-## Credenciais
+## Credenciais (apenas ambiente local / lab acadêmico)
+
+> Não usar em produção. Valores fixos só para reprodução do MVP na máquina do aluno/avaliador.
 
 | Serviço | Acesso | Credenciais |
 |---------|--------|-------------|

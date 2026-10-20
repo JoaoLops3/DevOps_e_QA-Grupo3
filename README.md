@@ -1,4 +1,4 @@
-# Educação Continuada Gamificada — Architecture Lab B1 + AC1 (História 3QA)
+****# Educação Continuada Gamificada — Architecture Lab B1 + AC1 (História 3QA)
 
 **Equipe:** João Gabriel, Hector Silveira, Miguel Muran  
 **Repositório:** https://github.com/JoaoLops3/DevOps_e_QA-Grupo3.git  
@@ -81,20 +81,19 @@ Rastreabilidade detalhada (RF/RNF/ASR/RPC por desafio): seções 6 e 7 de [`docs
 
 ## 3. Evidências B1 — pasta e arquivos principais
 
-Índice: [`docs/evidencias/labs/README.md`](docs/evidencias/labs/README.md)
+**Galeria completa (capturas de todos os labs + C4):** [`docs/evidencias/labs/README.md`](docs/evidencias/labs/README.md)
 
 | Lab | Pasta | Hipótese | Artefatos principais |
 | :--- | :--- | :--- | :--- |
-| 01 | [`docs/evidencias/labs/lab01/`](docs/evidencias/labs/lab01/) | Fronteiras Modulith | `modulith_verify_ok.png`, logs Surefire (`modularity_tests.log`, `com.educont.ModularityTests*.txt`) |
+| 01 | [`docs/evidencias/labs/lab01/`](docs/evidencias/labs/lab01/) | Fronteiras Modulith | `modulith_verify_ok.png`, logs Surefire |
 | 02 | [`docs/evidencias/labs/lab02/`](docs/evidencias/labs/lab02/) | Domínio sem Spring/JPA | `domain_tests_ok.png`, `domain_tests.log`, `resumo.txt` |
-| 03 | [`docs/evidencias/labs/lab03/`](docs/evidencias/labs/lab03/) | Circuit Breaker / fallback | `circuit_close_fallback.png`, `circuit_open_fallback.png`, `circuit_breaker_run.log`, `run_ai_up.log`, `run_ai_down.log` |
-| 04 | [`docs/evidencias/labs/lab04/`](docs/evidencias/labs/lab04/) | Fila com consumer OFF | `rabbitmq_fila_50.png`, `rabbitmq_fila_200.png`, `publish_run.log`, `queue_depth.txt` |
-| 05 | [`docs/evidencias/labs/lab05/`](docs/evidencias/labs/lab05/) | MQTT → Gateway → AMQP | `mqtt_gateway_fluxo.png`, `gateway.log`, `sensor_run.log`, `fluxo_resumo.log` |
-| 06 | [`docs/evidencias/labs/lab06/`](docs/evidencias/labs/lab06/) | Jenkins + Prometheus/Grafana | `jenkins_jobs_dashboard.png`, `jenkins_pipeline_core_*.png`, `pipeline-*_StageView.png`, `pipeline-*_console.log`, `prometheus_targets.png`, `grafico_queries_Throughput_latenciaP95.png` |
+| 03 | [`docs/evidencias/labs/lab03/`](docs/evidencias/labs/lab03/) | Circuit Breaker / fallback | `circuit_close_fallback.png`, `circuit_open_fallback.png`, logs |
+| 04 | [`docs/evidencias/labs/lab04/`](docs/evidencias/labs/lab04/) | Fila com consumer OFF | `rabbitmq_fila_200.png`, `publish_run.log`, `queue_depth.txt` (150 ready) |
+| 05 | [`docs/evidencias/labs/lab05/`](docs/evidencias/labs/lab05/) | MQTT → Gateway → AMQP | `mqtt_gateway_fluxo.png`, `gateway.log`, `sensor_run.log` |
+| 06 | [`docs/evidencias/labs/lab06/`](docs/evidencias/labs/lab06/) | Jenkins + Prometheus/Grafana | prints Jenkins, `prometheus_*.json`, `load_test.log`, `grafana_acesso.txt` |
 | C4 | [`docs/evidencias/labs/c4/`](docs/evidencias/labs/c4/) | Export dos diagramas | `c4-*.png` |
 
-Reprodução de cada lab: README em `labs/lab0x-…/`. O Lab 06 embute as capturas no próprio [`labs/lab06-jenkins-prometheus/README.md`](labs/lab06-jenkins-prometheus/README.md).
-
+Reprodução: `README.md` de cada pasta em `labs/lab0x-…/` (1–2 capturas + link para a pasta de evidências).
 ---
 
 ## 4. Estrutura do repositório
@@ -194,6 +193,8 @@ docker compose up --build
 | **Postgres** | `localhost:5432` · db `progresso_db` · user/senha `progresso` |
 | **pgAdmin** | http://localhost:5050/ · `admin@progresso.com` / `admin` |
 
+> Credenciais acima são **somente para lab local** (não produção). Detalhes: [`docker/README.md`](docker/README.md).
+
 **Opção B — Postgres no Docker + app no Maven**
 
 ```bash
@@ -247,7 +248,7 @@ Detalhes: [`docker/README.md`](docker/README.md)
 
 | Tipo | Pasta / arquivos |
 | :--- | :--- |
-| User Stories e BDD | [`docs/evidencias/us-bdd/`](docs/evidencias/us-bdd/) — `USER STORIES_BDD.png`, `USER STORIES_BDD2.png` |
+| User Stories e BDD | [`docs/evidencias/us-bdd/`](docs/evidencias/us-bdd/) — índice em [`README.md`](docs/evidencias/us-bdd/README.md) |
 | Banco | [`docs/evidencias/banco/`](docs/evidencias/banco/) — `Tabela_banco_conclusoes_curso.png` |
 | TDD RED | [`docs/evidencias/red/`](docs/evidencias/red/) |
 | TDD GREEN | [`docs/evidencias/green/`](docs/evidencias/green/) |
