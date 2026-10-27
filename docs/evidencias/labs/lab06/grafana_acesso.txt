@@ -1,4 +1,7 @@
 Grafana: http://localhost:3000  (admin / admin)
 Prometheus: http://localhost:9090
-Datasource Grafana: URL http://prometheus:9090 (rede Docker) ou http://host.docker.internal:9090
-Painéis sugeridos: Throughput, Erros, Latência p95
+Datasource Grafana: URL http://prometheus:9090 (rede Docker) — provisionado em grafana/provisioning/
+Dashboard: "Lab 06 — Observabilidade (ASR-12)"  UID=lab06-asr12
+URL direta: http://localhost:3000/d/lab06-asr12/
+Painéis: Throughput (req/s), Latência p95, Target demo-metrics UP, Requests acumulados
+Evidência PNG: grafana_dashboard_asr12.png

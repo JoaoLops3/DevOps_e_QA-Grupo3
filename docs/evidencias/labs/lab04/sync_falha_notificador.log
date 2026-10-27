@@ -1,0 +1,3 @@
+[sync] progresso persistido: {"alunoId": "aluno-sync-1", "cursoId": "curso-sync-1", "media": 8.5, "status": "CONCLUIDO_LOCAL"}
+[sync] notificador FALHOU após 10 ms: <urlopen error [Errno 61] Connection refused>
+[sync] CONCLUSÃO BLOQUEADA/FALHA — notificação síncrona impediu responder sucesso ao aluno (contraste com RabbitMQ assíncrono).

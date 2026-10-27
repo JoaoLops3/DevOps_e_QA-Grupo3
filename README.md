@@ -36,14 +36,14 @@ Não há seis arquiteturas distintas. Há um **registro arquitetural vivo** e se
 
 | Entrega do enunciado | Onde está |
 | :--- | :--- |
-| Registro arquitetural + matriz de ASRs | [`docs/Arquitetura/README.md`](docs/Arquitetura/README.md) |
-| ADRs (001–006) | [`docs/Arquitetura/adr/`](docs/Arquitetura/adr/) |
-| C4 (PlantUML + PNG) | [`docs/Arquitetura/diagramas/`](docs/Arquitetura/diagramas/) |
+| Registro arquitetural + matriz de ASRs | [`docs/arquitetura/README.md`](docs/arquitetura/README.md) |
+| ADRs (001–006) | [`docs/arquitetura/adr/`](docs/arquitetura/adr/) |
+| C4 (PlantUML + PNG) | [`docs/arquitetura/diagramas/`](docs/arquitetura/diagramas/) |
 | Mini-labs (código / reprodução) | [`labs/`](labs/) |
 | Evidências (fotos, logs, JSON) | [`docs/evidencias/labs/`](docs/evidencias/labs/) |
-| Decisões iniciais Tech Lead | [`docs/Arquitetura/EXB1_DESAFIO1_AC1/`](docs/Arquitetura/EXB1_DESAFIO1_AC1/) |
+| Decisões iniciais Tech Lead | [`docs/arquitetura/EXB1_DESAFIO1_AC1/`](docs/arquitetura/EXB1_DESAFIO1_AC1/) |
 
-> No enunciado o caminho aparece como `/docs/arquitetura/`. Neste repositório a pasta é **`docs/Arquitetura/`**.
+> Path do enunciado e do repositório: **`/docs/arquitetura/`** (alinhado ao B1).
 
 ### Contrato de runtime
 
@@ -61,14 +61,14 @@ O compose da **raiz** não sobe AI Service, Mosquitto, RabbitMQ, Jenkins, Promet
 
 | # | Decisão | ADR | Mini-lab | Evidências |
 | :---: | :--- | :--- | :--- | :--- |
-| **1** | Monólito modular | [ADR-001](docs/Arquitetura/adr/ADR-001-monolito-modular.md) | [lab01-spring-modulith](labs/lab01-spring-modulith/) | [lab01/](docs/evidencias/labs/lab01/) |
-| **2** | Hexagonal no domínio | [ADR-002](docs/Arquitetura/adr/ADR-002-arquitetura-hexagonal.md) | [lab02-domain-isolation](labs/lab02-domain-isolation/) | [lab02/](docs/evidencias/labs/lab02/) |
-| **3** | FastAPI + Circuit Breaker | [ADR-003](docs/Arquitetura/adr/ADR-003-servico-python-ia.md) | [lab03-python-circuitbreaker](labs/lab03-python-circuitbreaker/) | [lab03/](docs/evidencias/labs/lab03/) |
-| **4** | RabbitMQ + DLQ | [ADR-004](docs/Arquitetura/adr/ADR-004-mensageria-assincrona.md) | [lab04-rabbitmq-resilience](labs/lab04-rabbitmq-resilience/) | [lab04/](docs/evidencias/labs/lab04/) |
-| **5** | MQTT + IoT Gateway | [ADR-005](docs/Arquitetura/adr/ADR-005-integracao-iot-mqtt.md) | [lab05-mqtt-gateway](labs/lab05-mqtt-gateway/) | [lab05/](docs/evidencias/labs/lab05/) |
-| **6** | Jenkins + Prometheus/Grafana | [ADR-006](docs/Arquitetura/adr/ADR-006-cicd-observabilidade.md) | [lab06-jenkins-prometheus](labs/lab06-jenkins-prometheus/) | [lab06/](docs/evidencias/labs/lab06/) |
+| **1** | Monólito modular | [ADR-001](docs/arquitetura/adr/ADR-001-monolito-modular.md) | [lab01-spring-modulith](labs/lab01-spring-modulith/) | [lab01/](docs/evidencias/labs/lab01/) |
+| **2** | Hexagonal no domínio | [ADR-002](docs/arquitetura/adr/ADR-002-arquitetura-hexagonal.md) | [lab02-domain-isolation](labs/lab02-domain-isolation/) | [lab02/](docs/evidencias/labs/lab02/) |
+| **3** | FastAPI + Circuit Breaker | [ADR-003](docs/arquitetura/adr/ADR-003-servico-python-ia.md) | [lab03-python-circuitbreaker](labs/lab03-python-circuitbreaker/) | [lab03/](docs/evidencias/labs/lab03/) |
+| **4** | RabbitMQ + DLQ | [ADR-004](docs/arquitetura/adr/ADR-004-mensageria-assincrona.md) | [lab04-rabbitmq-resilience](labs/lab04-rabbitmq-resilience/) | [lab04/](docs/evidencias/labs/lab04/) |
+| **5** | MQTT + IoT Gateway | [ADR-005](docs/arquitetura/adr/ADR-005-integracao-iot-mqtt.md) | [lab05-mqtt-gateway](labs/lab05-mqtt-gateway/) | [lab05/](docs/evidencias/labs/lab05/) |
+| **6** | Jenkins + Prometheus/Grafana | [ADR-006](docs/arquitetura/adr/ADR-006-cicd-observabilidade.md) | [lab06-jenkins-prometheus](labs/lab06-jenkins-prometheus/) | [lab06/](docs/evidencias/labs/lab06/) |
 
-Rastreabilidade RF/RNF/ASR/RPC: seções 6 e 7 de [`docs/Arquitetura/README.md`](docs/Arquitetura/README.md).
+Rastreabilidade RF/RNF/ASR/RPC: seções 6 e 7 de [`docs/arquitetura/README.md`](docs/arquitetura/README.md).
 
 ---
 
@@ -79,7 +79,7 @@ Rastreabilidade RF/RNF/ASR/RPC: seções 6 e 7 de [`docs/Arquitetura/README.md`]
 | Artefato | Link |
 | :--- | :--- |
 | Mini-lab | [`labs/lab01-spring-modulith/`](labs/lab01-spring-modulith/) |
-| ADR | [ADR-001](docs/Arquitetura/adr/ADR-001-monolito-modular.md) |
+| ADR | [ADR-001](docs/arquitetura/adr/ADR-001-monolito-modular.md) |
 | Evidências | [`docs/evidencias/labs/lab01/`](docs/evidencias/labs/lab01/) |
 | Reprodução | `../../mvnw -f pom.xml test -Dtest=ModularityTests` |
 
@@ -100,7 +100,7 @@ Rastreabilidade RF/RNF/ASR/RPC: seções 6 e 7 de [`docs/Arquitetura/README.md`]
 | Artefato | Link |
 | :--- | :--- |
 | Mini-lab | [`labs/lab02-domain-isolation/`](labs/lab02-domain-isolation/) |
-| ADR | [ADR-002](docs/Arquitetura/adr/ADR-002-arquitetura-hexagonal.md) |
+| ADR | [ADR-002](docs/arquitetura/adr/ADR-002-arquitetura-hexagonal.md) |
 | Evidências | [`docs/evidencias/labs/lab02/`](docs/evidencias/labs/lab02/) |
 | Reprodução | `../../mvnw -f pom.xml test` |
 
@@ -121,7 +121,7 @@ Rastreabilidade RF/RNF/ASR/RPC: seções 6 e 7 de [`docs/Arquitetura/README.md`]
 | Artefato | Link |
 | :--- | :--- |
 | Mini-lab | [`labs/lab03-python-circuitbreaker/`](labs/lab03-python-circuitbreaker/) |
-| ADR | [ADR-003](docs/Arquitetura/adr/ADR-003-servico-python-ia.md) |
+| ADR | [ADR-003](docs/arquitetura/adr/ADR-003-servico-python-ia.md) |
 | Evidências | [`docs/evidencias/labs/lab03/`](docs/evidencias/labs/lab03/) |
 | Reprodução | `docker compose` + `core_circuit_breaker_demo.py` |
 
@@ -143,24 +143,25 @@ Rastreabilidade RF/RNF/ASR/RPC: seções 6 e 7 de [`docs/Arquitetura/README.md`]
 
 ## 6. Lab 04 — Mensageria assíncrona (RabbitMQ + DLQ)
 
-**Hipótese:** com o consumidor desligado, o publisher acumula eventos `CursoConcluidoEvent` na fila sem perda — **ASR-07 / ASR-08**.
+**Hipótese:** com o consumidor desligado, o publisher acumula eventos `CursoConcluidoEvent` na fila sem perda — **ASR-07 / ASR-08**.  
+**Contraste do enunciado:** REST síncrono falha com notificador DOWN; RabbitMQ assíncrono preserva eventos (`sync/comparar_sync_async.py`).
 
 | Artefato | Link |
 | :--- | :--- |
 | Mini-lab | [`labs/lab04-rabbitmq-resilience/`](labs/lab04-rabbitmq-resilience/) |
-| ADR | [ADR-004](docs/Arquitetura/adr/ADR-004-mensageria-assincrona.md) |
+| ADR | [ADR-004](docs/arquitetura/adr/ADR-004-mensageria-assincrona.md) |
 | Evidências | [`docs/evidencias/labs/lab04/`](docs/evidencias/labs/lab04/) |
-| Reprodução | `docker compose` + `publisher/publish_events.py` |
+| Reprodução | `docker compose` + `python sync/comparar_sync_async.py` |
 
 ### Foto
 
-Management UI — fila com consumer OFF (`queue_depth.txt`: **ready=150** após reexecuções de 50):
+Management UI — fila com consumer OFF (`queue_depth.txt`: **ready=50** na evidência do contraste):
 
 ![Lab 04 — RabbitMQ profundidade da fila](docs/evidencias/labs/lab04/rabbitmq_fila_ready.png)
 
 ### Outros artefatos
 
-`publish_run.log`, `queue_depth.txt`
+`sync_vs_async_run.log`, `sync_falha_notificador.log`, `publish_run.log`, `queue_depth.txt`
 
 ---
 
@@ -171,7 +172,7 @@ Management UI — fila com consumer OFF (`queue_depth.txt`: **ready=150** após 
 | Artefato | Link |
 | :--- | :--- |
 | Mini-lab | [`labs/lab05-mqtt-gateway/`](labs/lab05-mqtt-gateway/) |
-| ADR | [ADR-005](docs/Arquitetura/adr/ADR-005-integracao-iot-mqtt.md) |
+| ADR | [ADR-005](docs/arquitetura/adr/ADR-005-integracao-iot-mqtt.md) |
 | Evidências | [`docs/evidencias/labs/lab05/`](docs/evidencias/labs/lab05/) |
 | Reprodução | `docker compose` + `iot_gateway.py` / `iot_sensor_simulator.py` |
 
@@ -192,7 +193,7 @@ Management UI — fila com consumer OFF (`queue_depth.txt`: **ready=150** após 
 | Artefato | Link |
 | :--- | :--- |
 | Mini-lab | [`labs/lab06-jenkins-prometheus/`](labs/lab06-jenkins-prometheus/) |
-| ADR | [ADR-006](docs/Arquitetura/adr/ADR-006-cicd-observabilidade.md) |
+| ADR | [ADR-006](docs/arquitetura/adr/ADR-006-cicd-observabilidade.md) |
 | Evidências | [`docs/evidencias/labs/lab06/`](docs/evidencias/labs/lab06/) |
 | Reprodução | `docker compose` + `./trigger_pipelines.sh` + carga |
 
@@ -220,11 +221,14 @@ Management UI — fila com consumer OFF (`queue_depth.txt`: **ready=150** após 
 
 ### Prometheus / Grafana (ASR-12)
 
-Sem captura PNG de painel Grafana — comprovação via artefatos versionados:
+**Dashboard Grafana provisionado** (Throughput, Latência p95, target UP):
+
+![Lab 06 — Grafana ASR-12](docs/evidencias/labs/lab06/grafana_dashboard_asr12.png)
 
 | Arquivo | O que comprova |
 | :--- | :--- |
-| `prometheus_up.json` | Target `lab06-demo` UP (`"1"`) |
+| `grafana_dashboard_asr12.png` | Painel Grafana com throughput, p95 e target UP |
+| `prometheus_up.json` | Target `lab06-demo-core` UP (`"1"`) |
 | `prometheus_p95.json` | Query de latência p95 |
 | `load_test.log` | Carga contra `demo-metrics` |
 | `grafana_acesso.txt` | URL Grafana + datasource Prometheus |
@@ -238,43 +242,43 @@ Sem captura PNG de painel Grafana — comprovação via artefatos versionados:
 
 ## 9. Diagramas C4
 
-Fonte (`.puml` + PNG): [`docs/Arquitetura/diagramas/`](docs/Arquitetura/diagramas/)  
+Fonte (`.puml` + PNG): [`docs/arquitetura/diagramas/`](docs/arquitetura/diagramas/)  
 Cópia em evidências: [`docs/evidencias/labs/c4/`](docs/evidencias/labs/c4/)
 
 | Nível | PNG |
 | :--- | :--- |
-| Container | [`c4-container-overview.png`](docs/Arquitetura/diagramas/c4-container-overview.png) |
-| Component (Core) | [`c4-component-core.png`](docs/Arquitetura/diagramas/c4-component-core.png) |
-| Sequence (D4) | [`c4-sequence-desafio4.png`](docs/Arquitetura/diagramas/c4-sequence-desafio4.png) |
-| Deployment (D6) | [`c4-deployment.png`](docs/Arquitetura/diagramas/c4-deployment.png) |
+| Container | [`c4-container-overview.png`](docs/arquitetura/diagramas/c4-container-overview.png) |
+| Component (Core) | [`c4-component-core.png`](docs/arquitetura/diagramas/c4-component-core.png) |
+| Sequence (D4) | [`c4-sequence-desafio4.png`](docs/arquitetura/diagramas/c4-sequence-desafio4.png) |
+| Deployment (D6) | [`c4-deployment.png`](docs/arquitetura/diagramas/c4-deployment.png) |
 
 ### Container
 
-![C4 Container](docs/Arquitetura/diagramas/c4-container-overview.png)
+![C4 Container](docs/arquitetura/diagramas/c4-container-overview.png)
 
 ### Component (Core)
 
-![C4 Component](docs/Arquitetura/diagramas/c4-component-core.png)
+![C4 Component](docs/arquitetura/diagramas/c4-component-core.png)
 
 ### Sequence (Desafio 4)
 
-![C4 Sequence D4](docs/Arquitetura/diagramas/c4-sequence-desafio4.png)
+![C4 Sequence D4](docs/arquitetura/diagramas/c4-sequence-desafio4.png)
 
 ### Deployment (Desafio 6)
 
-![C4 Deployment D6](docs/Arquitetura/diagramas/c4-deployment.png)
+![C4 Deployment D6](docs/arquitetura/diagramas/c4-deployment.png)
 
 ---
 
 ## 10. Checklist B1
 
 - [x] Link do repositório e identificação da equipe
-- [x] README arquitetural com as seis decisões e matriz de ASRs — [`docs/Arquitetura/README.md`](docs/Arquitetura/README.md)
-- [x] ADRs essenciais — [`docs/Arquitetura/adr/`](docs/Arquitetura/adr/)
+- [x] README arquitetural com as seis decisões e matriz de ASRs — [`docs/arquitetura/README.md`](docs/arquitetura/README.md)
+- [x] ADRs essenciais — [`docs/arquitetura/adr/`](docs/arquitetura/adr/)
 - [x] C4 coerente (Container, Component, Sequence, Deployment) — seção [9](#9-diagramas-c4)
 - [x] Mini-labs — [`labs/`](labs/)
 - [x] Evidências versionadas com fotos por lab — seções [3](#3-lab-01--monólito-modular-spring-modulith)–[8](#8-lab-06--cicd-jenkins--observabilidade-prometheusgrafana)
-- [x] Síntese para a PoC da AF — seção 5 de [`docs/Arquitetura/README.md`](docs/Arquitetura/README.md)
+- [x] Síntese para a PoC da AF — seção 5 de [`docs/arquitetura/README.md`](docs/arquitetura/README.md)
 
 ---
 
@@ -379,7 +383,7 @@ docker compose up -d postgres
 ├── frontend/                          # Vue (Maven copia para static/)
 ├── docker-compose.yml                 # MVP: app + Postgres + pgAdmin
 ├── docs/
-│   ├── Arquitetura/                   # ADRs, C4, registro vivo, ASRs
+│   ├── arquitetura/                   # ADRs, C4, registro vivo, ASRs
 │   └── evidencias/
 │       ├── labs/                      # Fotos/logs B1 (lab01…lab06 + c4)
 │       ├── red/ green/ blue/          # TDD AC1
@@ -401,7 +405,7 @@ docker compose up -d postgres
 ## 13. Leitura sugerida para avaliação
 
 1. Este README — seções **1–10** (B1 completo com fotos).
-2. [`docs/Arquitetura/README.md`](docs/Arquitetura/README.md) — ASRs, rastreabilidade, síntese AF.
-3. ADRs em [`docs/Arquitetura/adr/`](docs/Arquitetura/adr/).
+2. [`docs/arquitetura/README.md`](docs/arquitetura/README.md) — ASRs, rastreabilidade, síntese AF.
+3. ADRs em [`docs/arquitetura/adr/`](docs/arquitetura/adr/).
 4. Reprodução opcional: `README.md` de cada pasta em [`labs/`](labs/).
 5. AC1 (se necessário): seção [11](#11-ac1--user-story-bdd-e-mvp).

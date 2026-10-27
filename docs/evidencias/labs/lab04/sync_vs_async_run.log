@@ -1,0 +1,25 @@
+[sync] progresso persistido: {"alunoId": "aluno-sync-1", "cursoId": "curso-sync-1", "media": 8.5, "status": "CONCLUIDO_LOCAL"}
+[sync] notificador FALHOU após 12 ms: <urlopen error [Errno 61] Connection refused>
+[sync] CONCLUSÃO BLOQUEADA/FALHA — notificação síncrona impediu responder sucesso ao aluno (contraste com RabbitMQ assíncrono).
+Publicados 50 eventos em 2 ms
+Latência média de publicação: 0.0 ms/evento
+Consumer OFF → mensagens acumulam em gamificacao.notificacao (sem perda).
+Management UI: http://localhost:15672  user/pass: gamificacao
+============================================================
+LAB 04 — contraste síncrono vs assíncrono
+============================================================
+
+--- 1) Interação SÍNCRONA (REST) com notificador DOWN ---
+[resultado sync] exit=1 → FALHA esperada (notificador indisponível)
+
+--- 2) Interação ASSÍNCRONA (RabbitMQ) com consumer OFF ---
+[resultado async] exit=0
+[resultado async] messages_ready antes=0 depois=50 delta=50
+[resultado async] Core publicou sem esperar consumidor → conclusão NÃO bloqueada; eventos preservados na fila.
+
+============================================================
+SÍNTESE
+============================================================
+- Síncrono (REST): bloqueia/falha com notificador DOWN
+- Assíncrono (RabbitMQ): publicação OK com consumer OFF
+Hipótese ADR-004 confirmada: efeitos secundários assíncronos protegem o RF02.

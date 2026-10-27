@@ -34,7 +34,7 @@ Pasta de artefatos: [`docs/evidencias/labs/lab06/`](../../docs/evidencias/labs/l
 - Builds com resultado SUCCESS (Quality Gate não bloqueou)
 - Target Prometheus em estado UP (`prometheus_up.json` com `"1"`)
 - Métricas de carga / latência p95 coletadas (`load_test.log`, `prometheus_p95.json`)
-- Grafana acessível com datasource Prometheus (`grafana_acesso.txt`)
+- Grafana com dashboard provisionado **Lab 06 — Observabilidade (ASR-12)** e PNG em evidências
 - Evidência em `docs/evidencias/labs/lab06/`
 
 ## Evidências
@@ -57,10 +57,15 @@ Também versionados: `jenkins_pipeline_core_ok.png`, `jenkins_pipeline_core_cons
 
 ### ASR-12 — Prometheus / Grafana
 
+Dashboard provisionado (UID `lab06-asr12`) — throughput, latência p95 e target UP:
+
+![Grafana — Lab 06 ASR-12](../../docs/evidencias/labs/lab06/grafana_dashboard_asr12.png)
+
 | Artefato | O que comprova |
 | :--- | :--- |
-| `prometheus_up.json` | Target `lab06-demo` UP (`value` = `"1"`) |
+| `grafana_dashboard_asr12.png` | Captura do painel Grafana sob carga |
+| `prometheus_up.json` | Target `lab06-demo-core` UP (`value` = `"1"`) |
 | `prometheus_p95.json` | Query de latência p95 respondendo |
 | `load_test.log` | Carga gerada contra `demo-metrics` |
 | `demo_health.json` | Health do serviço instrumentado |
-| `grafana_acesso.txt` | URL Grafana + datasource Prometheus |
+| `grafana_acesso.txt` | URL Grafana + datasource Prometheus + UID do dashboard |
