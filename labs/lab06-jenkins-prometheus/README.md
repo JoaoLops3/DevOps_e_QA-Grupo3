@@ -40,7 +40,7 @@ Pasta de artefatos: [`docs/evidencias/labs/lab06/`](../../docs/evidencias/labs/l
 ## Evidências
 
 Pasta: [`docs/evidencias/labs/lab06/`](../../docs/evidencias/labs/lab06/)  
-Galeria B1: [`docs/evidencias/labs/README.md`](../../docs/evidencias/labs/README.md)
+Galeria B1: [`README.md`](../../README.md) (seção Lab 06)
 
 ### ASR-11 — Jenkins (pipelines autônomas + Quality Gate)
 
@@ -52,7 +52,7 @@ Estágios Build → Test → Quality Gate (`pipeline-core`):
 
 ![Jenkins — estágios pipeline-core](../../docs/evidencias/labs/lab06/jenkins_pipeline_core_stages.png)
 
-Também versionados: `jenkins_pipeline_core_ok.png`, `jenkins_pipeline_core_console.png`, `Terminal_lab6_Jenkins.png`,  
+Também versionados: `jenkins_pipeline_core_ok.png`, `jenkins_pipeline_core_console.png`, `jenkins_terminal.png`,  
 `pipeline-core_console.log`, `pipeline-ai_console.log`, `pipeline-gateway_console.log`.
 
 ### ASR-12 — Prometheus / Grafana

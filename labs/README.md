@@ -2,6 +2,8 @@
 
 Mini-labs isolados por desafio. Cada pasta tem hipótese, comando de execução, critério de aceite e link para evidências.
 
+**Galeria completa (explicação + fotos no README raiz):** [`../README.md`](../README.md) — seções 3 a 9.
+
 | Lab | Desafio | ASR | Reprodução |
 | :--- | :--- | :--- | :--- |
 | [lab01-spring-modulith](./lab01-spring-modulith/) | D1 — Monólito modular | ASR-01/02 | `../../mvnw -f pom.xml test -Dtest=ModularityTests` |
@@ -11,7 +13,7 @@ Mini-labs isolados por desafio. Cada pasta tem hipótese, comando de execução,
 | [lab05-mqtt-gateway](./lab05-mqtt-gateway/) | D5 — IoT / MQTT | ASR-09/10 | `docker compose` + gateway/sensor |
 | [lab06-jenkins-prometheus](./lab06-jenkins-prometheus/) | D6 — CI/CD e observabilidade | ASR-11/12 | `docker compose` + carga |
 
-**Galeria de capturas:** [`docs/evidencias/labs/README.md`](../docs/evidencias/labs/README.md)  
+**Evidências (arquivos):** [`docs/evidencias/labs/`](../docs/evidencias/labs/)  
 **Registro arquitetural:** [`docs/Arquitetura/README.md`](../docs/Arquitetura/README.md)
 
 MVP na raiz (Core + PostgreSQL + pgAdmin): `docker compose up --build` — ver [`docker/README.md`](../docker/README.md).  

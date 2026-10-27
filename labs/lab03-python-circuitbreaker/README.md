@@ -30,7 +30,7 @@ Referência Java: `core/AiRecommendationClient.java` e `core/application.yml`.
 
 ## Evidências
 
-Pasta: [`docs/evidencias/labs/lab03/`](../../docs/evidencias/labs/lab03/) · Galeria B1: [`docs/evidencias/labs/README.md`](../../docs/evidencias/labs/README.md)
+Pasta: [`docs/evidencias/labs/lab03/`](../../docs/evidencias/labs/lab03/) · Galeria B1: [`README.md`](../../README.md) (seção Lab 03)
 
 Circuit Breaker CLOSED (IA disponível) e OPEN (degradação graciosa):
 

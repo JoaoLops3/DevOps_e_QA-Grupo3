@@ -35,7 +35,7 @@ lab01-spring-modulith/
 
 ## Evidências
 
-Pasta: [`docs/evidencias/labs/lab01/`](../../docs/evidencias/labs/lab01/) · Galeria B1: [`docs/evidencias/labs/README.md`](../../docs/evidencias/labs/README.md)
+Pasta: [`docs/evidencias/labs/lab01/`](../../docs/evidencias/labs/lab01/) · Galeria B1: [`README.md`](../../README.md) (seção Lab 01)
 
 `ApplicationModules.verify()` OK (Surefire / Modulith):
 

@@ -27,10 +27,10 @@ Evidência: `docs/evidencias/labs/lab04/`
 ## Evidências
 
 Pasta: [`docs/evidencias/labs/lab04/`](../../docs/evidencias/labs/lab04/)  
-Galeria B1: [`docs/evidencias/labs/README.md`](../../docs/evidencias/labs/README.md)
+Galeria B1: [`README.md`](../../README.md) (seção Lab 04)
 
-Management UI — fila acumulada com consumer OFF (`queue_depth.txt`: **ready=150** após reexecuções de 50; captura `rabbitmq_fila_200.png`):
+Management UI — fila acumulada com consumer OFF (`queue_depth.txt`: **ready=150** após reexecuções de 50; captura `rabbitmq_fila_ready.png`):
 
-![RabbitMQ — profundidade da fila](../../docs/evidencias/labs/lab04/rabbitmq_fila_200.png)
+![RabbitMQ — profundidade da fila](../../docs/evidencias/labs/lab04/rabbitmq_fila_ready.png)
 
 Logs: `publish_run.log` (50 publicados na última corrida), `queue_depth.txt`.

@@ -28,7 +28,7 @@ Evidência: `docs/evidencias/labs/lab05/`
 
 ## Evidências
 
-Pasta: [`docs/evidencias/labs/lab05/`](../../docs/evidencias/labs/lab05/) · Galeria B1: [`docs/evidencias/labs/README.md`](../../docs/evidencias/labs/README.md)
+Pasta: [`docs/evidencias/labs/lab05/`](../../docs/evidencias/labs/lab05/) · Galeria B1: [`README.md`](../../README.md) (seção Lab 05)
 
 Fluxo MQTT → IoT Gateway → AMQP:
 

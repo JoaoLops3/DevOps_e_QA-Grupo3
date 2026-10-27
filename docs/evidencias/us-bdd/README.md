@@ -6,8 +6,8 @@ História **3QA** (progresso da assinatura básica → Premium) e cenários BDD 
 
 | Arquivo | Conteúdo |
 | :--- | :--- |
-| [`USER STORIES_BDD.png`](./USER%20STORIES_BDD.png) | User Story 3QA e contexto BDD |
-| [`USER STORIES_BDD2.png`](./USER%20STORIES_BDD2.png) | Continuação / cenários por integrante |
+| [`user_stories_bdd.png`](./user_stories_bdd.png) | User Story 3QA e contexto BDD |
+| [`user_stories_bdd2.png`](./user_stories_bdd2.png) | Continuação / cenários por integrante |
 
 ## User Story (resumo)
 

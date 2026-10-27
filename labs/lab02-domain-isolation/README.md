@@ -29,7 +29,7 @@ Evidência: `docs/evidencias/labs/lab02/`
 
 ## Evidências
 
-Pasta: [`docs/evidencias/labs/lab02/`](../../docs/evidencias/labs/lab02/) · Galeria B1: [`docs/evidencias/labs/README.md`](../../docs/evidencias/labs/README.md)
+Pasta: [`docs/evidencias/labs/lab02/`](../../docs/evidencias/labs/lab02/) · Galeria B1: [`README.md`](../../README.md) (seção Lab 02)
 
 Testes de domínio (Java puro) OK:
 
